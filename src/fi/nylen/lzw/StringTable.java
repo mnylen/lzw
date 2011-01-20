@@ -8,6 +8,10 @@ public class StringTable {
     private int currentCode = -1;
     private HashMap<StringEntry, Integer> entries = new HashMap<StringEntry, Integer>();
 
+    public StringTable(int bits) {
+        
+    }
+
     private class StringEntry {
         private int prefixCode;
         private int appendCharacter;

@@ -10,7 +10,7 @@ public class StringTableTest {
 
     @Before
     public void setUp() {
-        table = new StringTable();
+        table = new StringTable(3);
     }
 
     @Test
