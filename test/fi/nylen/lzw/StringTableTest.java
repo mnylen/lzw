@@ -3,13 +3,10 @@ package fi.nylen.lzw;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static fi.nylen.lzw.TestUtils.*;
 
 public class StringTableTest {
     private StringTable table;
-
-    public int ord(char c) {
-        return (int)c;
-    }
 
     @Before
     public void setUp() {
