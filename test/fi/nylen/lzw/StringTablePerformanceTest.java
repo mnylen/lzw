@@ -58,10 +58,20 @@ public class StringTablePerformanceTest {
         long startTime = System.currentTimeMillis();
 
         for (int prefixCode = 0; prefixCode < numberOfCodes; prefixCode++) {
-            table.add(prefixCode, (byte)'A');
-            table.codeValue(prefixCode, (byte)'A');
+            int prefix = randomPrefix();
+            byte append = randomAppend();
+            table.add(prefix, append);
+            table.codeValue(prefix, append);
         }
 
         return (System.currentTimeMillis() - startTime);
+    }
+
+    private int randomPrefix() {
+        return (int)(Math.random() * 10000000) + 1;
+    }
+
+    private byte randomAppend() {
+        return (byte)((int)(Math.random() * 255) + 1);
     }
 }
