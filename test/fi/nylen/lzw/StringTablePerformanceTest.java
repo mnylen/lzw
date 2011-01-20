@@ -2,7 +2,6 @@ package fi.nylen.lzw;
 
 import org.junit.Before;
 import org.junit.Test;
-import static fi.nylen.lzw.TestUtils.*;
 
 public class StringTablePerformanceTest {
     private StringTable table;
