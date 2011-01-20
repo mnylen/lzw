@@ -81,7 +81,7 @@ public class StringTable {
             if (indexEmpty(index) || entryMatchesAt(index, prefixCode, appendCharacter)) {
                 return index;
             } else {
-                probes++;
+                probes += 1;
             }
         }
     }
@@ -95,6 +95,7 @@ public class StringTable {
     }
 
     private int calculateHash(int prefixCode, byte appendCharacter, int probes) {
-        return Math.abs((prefixCode << (bits-8)) ^ appendCharacter + probes) % tableSize;
+        int hash = (prefixCode << (bits-8)) ^ appendCharacter + probes;
+        return Math.abs(hash % tableSize);
     }
 }
