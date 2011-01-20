@@ -9,7 +9,7 @@ public class StringTablePerformanceTest {
 
     @Before
     public void setUp() {
-        table = new StringTable(24);
+        table = new StringTable(22);
     }
 
     @Test
@@ -46,12 +46,6 @@ public class StringTablePerformanceTest {
     public void addingAndRetrievingMillionCodes() {
         System.out.println("Adding and retrieving million codes took: " +
             benchmark(1000000) + " ms");
-    }
-
-    @Test
-    public void addingAndRetrievingFiveMillionCodes() {
-        System.out.println("Adding and retrieving five million codes took: " +
-            benchmark(5000000) + " ms");
     }
 
     private long benchmark(int numberOfCodes) {
