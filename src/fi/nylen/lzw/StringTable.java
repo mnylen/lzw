@@ -1,7 +1,6 @@
 package fi.nylen.lzw;
 
 import java.util.Arrays;
-
 import static fi.nylen.lzw.MathUtil.nextPrime;
 
 public class StringTable {
