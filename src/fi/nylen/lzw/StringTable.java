@@ -3,6 +3,9 @@ package fi.nylen.lzw;
 import java.util.Arrays;
 import static fi.nylen.lzw.MathUtil.nextPrime;
 
+/**
+ * Structure for adding and retrieving string entries in LZW compression.
+ */
 public class StringTable {
     public static final int STOP_CODE = 256;
     public static final int CLEAR_CODE = 257;
@@ -12,7 +15,13 @@ public class StringTable {
     private int[] prefixCodes;
     private byte[] appendCharacters;
     private int[] codeValues;
-    
+
+    /**
+     * Initializes a new string table that can hold p(2^codeWidth) entries, where
+     * p(n) calculates the nearest, larger than n, prime number to n.
+     * 
+     * @param codeWidth the code width
+     */
     public StringTable(int codeWidth) {
         tableSize = nextPrime((int)Math.pow(2, codeWidth));
         bits = codeWidth;
