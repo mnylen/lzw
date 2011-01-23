@@ -28,6 +28,7 @@ public class StringTable {
     }
 
     /**
+     * Gets the code that will be assigned for the next entry added.
      * @return next code - initially <code>CLEAR_CODE+1</code>
      */
     public int nextCode() {
@@ -35,7 +36,9 @@ public class StringTable {
     }
 
     /**
-     *
+     * Adds an entry to the table.
+     * @param prefixCode the prefix code
+     * @param appendCharacter the append character
      */
     public void add(int prefixCode, byte appendCharacter) {
         int index = findIndex(prefixCode, appendCharacter);
@@ -44,6 +47,12 @@ public class StringTable {
         codeValues[index] = nextCode++;
     }
 
+    /**
+     * Retrieves assigned code value for the entry.
+     * @param prefixCode the prefix code
+     * @param appendCharacter the append character
+     * @return assigned code value for the entry or <code>-1</code> if the entry was not found
+     */
     public int codeValue(int prefixCode, byte appendCharacter) {
         return codeValues[findIndex(prefixCode, appendCharacter)];
     }
