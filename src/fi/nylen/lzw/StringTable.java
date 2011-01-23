@@ -8,7 +8,7 @@ import static fi.nylen.lzw.MathUtil.nextPrime;
 public class StringTable {
     public static final int STOP_CODE = 256;
     public static final int CLEAR_CODE = 257;
-    private int currentCode = -1;
+    private int nextCode = CLEAR_CODE+1;
     private int bits;
     private int tableSize;
     private int[] prefixCodes;
@@ -28,32 +28,10 @@ public class StringTable {
     }
 
     /**
-     * @return current code - initially <code>-1</code>
-     */
-    public int currentCode() {
-        return currentCode;
-    }
-
-    /**
      * @return next code - initially <code>CLEAR_CODE+1</code>
      */
     public int nextCode() {
-        if (currentCode == -1) {
-            return CLEAR_CODE+1;
-        } else {
-            return currentCode+1;
-        }
-    }
-
-    /**
-     * Increases current code by one.
-     */
-    public void increaseCurrentCode() {
-        if (currentCode == -1) {
-            currentCode = CLEAR_CODE+1;
-        } else {
-            currentCode++;
-        }
+        return nextCode;
     }
 
     /**
@@ -63,8 +41,7 @@ public class StringTable {
         int index = findIndex(prefixCode, appendCharacter);
         prefixCodes[index] = prefixCode;
         appendCharacters[index] = appendCharacter;
-        codeValues[index] = nextCode();
-        increaseCurrentCode();
+        codeValues[index] = nextCode++;
     }
 
     public int codeValue(int prefixCode, byte appendCharacter) {

@@ -14,35 +14,16 @@ public class StringTableTest {
     }
 
     @Test
-    public void currentCodeShouldInitiallyBeNotSpecified() {
-        assertEquals(-1, table.currentCode());
-    }
-
-    @Test
     public void nextCodeShouldInitiallyBeClearCodePlusOne() {
         assertEquals(StringTable.CLEAR_CODE+1, table.nextCode());
     }
 
     @Test
-    public void increaseCurrentCodeShouldChangeCurrentCodeAsNextCode() {
-        int nextCode = table.nextCode();
-        table.increaseCurrentCode();
-
-        assertEquals(nextCode, table.currentCode());
-    }
-
-    @Test
-    public void increaseCurrentCodeShouldIncreaseNextCode() {
-        table.increaseCurrentCode();
-        assertEquals(table.currentCode()+1, table.nextCode());
-    }
-
-    @Test
-    public void addingStringShouldIncreaseCurrentCode() {
-        int nextCode = table.nextCode();
+    public void addingStringShouldIncreaseNextCodeByOne() {
+        int oldNextCode = table.nextCode();
         table.add(ord('L'), (byte)'Z');
 
-        assertEquals(table.currentCode(), nextCode);
+        assertEquals(oldNextCode+1, table.nextCode());
     }
 
     @Test
