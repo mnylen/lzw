@@ -32,4 +32,9 @@ public class TranslationTableTest {
         table.add(StringTable.CLEAR_CODE+1, (byte)'L');
         assertTrue(table.contains(StringTable.CLEAR_CODE+2));
     }
+
+    @Test
+    public void shouldReturnAssignedCodeWhenAdding() {
+        assertEquals(StringTable.CLEAR_CODE+1, table.add(ord('H'), (byte)'E'));
+    }
 }

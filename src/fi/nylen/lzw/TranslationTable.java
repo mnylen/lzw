@@ -11,7 +11,11 @@ public class TranslationTable {
         return code < nextCode;
     }
 
-    public void add(int prefixCode, byte appendCharacter) {
-        nextCode++;
+    public int add(int prefixCode, byte appendCharacter) {
+        return nextCode++;
+    }
+
+    public byte[] translate(int code) {
+        return null;
     }
 }
