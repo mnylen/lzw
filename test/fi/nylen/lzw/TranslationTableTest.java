@@ -11,7 +11,7 @@ public class TranslationTableTest {
 
     @Before
     public void setUp() {
-        table = new TranslationTable(3);
+        table = new TranslationTable(10);
     }
     
     @Test
@@ -36,5 +36,18 @@ public class TranslationTableTest {
     @Test
     public void shouldReturnAssignedCodeWhenAdding() {
         assertEquals(StringTable.CLEAR_CODE+1, table.add(ord('H'), (byte)'E'));
+    }
+
+    @Test
+    public void shouldTranslate() {
+        int code;
+        code = table.add(ord('H'), (byte)'E');
+        code = table.add(code, (byte)'L');
+        code = table.add(code, (byte)'L');
+        code = table.add(code, (byte)'O');
+
+        byte[] expected   = "HELLO".getBytes();
+        byte[] translated = table.translate(code);
+        assertArrayEquals(expected, translated);
     }
 }
