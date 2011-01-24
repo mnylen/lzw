@@ -30,16 +30,22 @@ public class TranslationTable {
     }
 
     public byte[] translate(int code) {
-        if (code < StringTable.STOP_CODE) {
-           return new byte[] { (byte)code };
-        } else {
-            byte[] prefix = translate(prefixCodes[code]);
-            byte append = appendCharacters[code];
-            byte[] string = new byte[prefix.length+1];
-            System.arraycopy(prefix, 0, string, 0, prefix.length);
-            string[string.length-1] = append;
-
-            return string;
+        int length = 0;
+        while (code > StringTable.CLEAR_CODE) {
+            decodeStack[length] = appendCharacters[code];
+            code = prefixCodes[code];
+            length++;
         }
+        
+        decodeStack[length++] = (byte)code;
+
+        byte[] reversed = new byte[length];
+        int j = length-1;
+        for (int i = 0; i < length; i++) {
+            reversed[i] = decodeStack[j];
+            j--;
+        }
+
+        return reversed;
     }
 }
