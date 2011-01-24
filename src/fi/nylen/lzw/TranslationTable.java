@@ -10,4 +10,8 @@ public class TranslationTable {
     public boolean contains(int code) {
         return code < nextCode;
     }
+
+    public void add(int prefixCode, byte appendCharacter) {
+        nextCode++;
+    }
 }

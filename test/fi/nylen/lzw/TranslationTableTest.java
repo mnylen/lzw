@@ -3,6 +3,7 @@ package fi.nylen.lzw;
 import org.junit.Before;
 import org.junit.Test;
 
+import static fi.nylen.lzw.TestUtils.ord;
 import static org.junit.Assert.*;
 
 public class TranslationTableTest {
@@ -15,11 +16,20 @@ public class TranslationTableTest {
     
     @Test
     public void shouldNotContainCodeWhenNotAdded() {
-        assertFalse(table.contains(300));
+        assertFalse(table.contains(StringTable.CLEAR_CODE+1));
     }
 
     @Test
     public void shouldContainCodesUpToClearCode() {
         assertTrue(table.contains(1));
+    }
+
+    @Test
+    public void shouldContainAfterAdding() {
+        table.add(ord('H'), (byte)'E');
+        assertTrue(table.contains(StringTable.CLEAR_CODE+1));
+
+        table.add(StringTable.CLEAR_CODE+1, (byte)'L');
+        assertTrue(table.contains(StringTable.CLEAR_CODE+2));
     }
 }
