@@ -38,14 +38,6 @@ public class TranslationTable {
         }
         
         decodeStack[length++] = (byte)code;
-
-        byte[] reversed = new byte[length];
-        int j = length-1;
-        for (int i = 0; i < length; i++) {
-            reversed[i] = decodeStack[j];
-            j--;
-        }
-
-        return reversed;
+        return ArrayUtils.reverse(decodeStack, 0, length);
     }
 }
