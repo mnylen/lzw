@@ -41,6 +41,10 @@ public class CodeWriter {
         }
     }
 
+    /**
+     * Writes out anything that's left in the buffer.
+     * @throws IOException if anything goes wrong
+     */
     public void flush() throws IOException {
         write(0);
     }
