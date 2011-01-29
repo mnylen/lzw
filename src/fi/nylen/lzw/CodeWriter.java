@@ -29,6 +29,6 @@ public class CodeWriter {
      * @throws IOException if anything goes wrong
      */
     public void write(int code) throws IOException {
-
+        out.write(code);
     }
 }
