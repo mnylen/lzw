@@ -29,6 +29,13 @@ public class CodeWriter {
      * @throws IOException if anything goes wrong
      */
     public void write(int code) throws IOException {
-        out.write(code);
+        int output = code << (32 - codeWidth);
+        int bitsRemaining = codeWidth;
+
+        while (bitsRemaining >= 8) {
+            out.write(output >>> 24);
+            output <<= 8;
+            bitsRemaining -= 8;
+        }
     }
 }
