@@ -89,6 +89,6 @@ public class StringTable {
 
     private int calculateHash(int prefixCode, byte appendCharacter, int probes) {
         int hash = (prefixCode << (bits-8)) ^ appendCharacter + probes;
-        return Math.abs(hash % tableSize);
+        return Math.abs(hash) % tableSize;
     }
 }
