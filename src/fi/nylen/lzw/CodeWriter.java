@@ -9,6 +9,8 @@ import java.io.OutputStream;
  */
 public class CodeWriter {
     private int codeWidth;
+    private int outputBitBuffer = 0;
+    private int outputBitCount = 0;
     private OutputStream out;
 
     /**
@@ -29,13 +31,17 @@ public class CodeWriter {
      * @throws IOException if anything goes wrong
      */
     public void write(int code) throws IOException {
-        int output = code << (32 - codeWidth);
-        int bitsRemaining = codeWidth;
+        outputBitBuffer |= code << (32 - codeWidth - outputBitCount);
+        outputBitCount  += codeWidth;
 
-        while (bitsRemaining >= 8) {
-            out.write(output >>> 24);
-            output <<= 8;
-            bitsRemaining -= 8;
+        while (outputBitCount >= 8) {
+            out.write(outputBitBuffer >>> 24);
+            outputBitBuffer <<= 8;
+            outputBitCount -= 8;
         }
+    }
+
+    public void flush() throws IOException {
+        write(0);
     }
 }

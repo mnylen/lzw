@@ -36,6 +36,18 @@ public class CodeWriterTest {
         assertEquals(0, out.bytes()[1]);
         assertEquals(1, out.bytes()[2]);
     }
+
+    @Test
+    public void testWriteCodeAndFlushWhenCodeWidthIsNotWholeBytes() throws IOException {
+        writer = new CodeWriter(out, 9);
+        writer.write(1);
+        assertEquals(1, out.count());
+        assertEquals(0, out.bytes()[0]);
+
+        writer.flush();
+        assertEquals(2, out.count());
+        assertEquals((byte)(1<<7), out.bytes()[1]);
+    }
 }
 
 class MockOutputStream extends OutputStream {
