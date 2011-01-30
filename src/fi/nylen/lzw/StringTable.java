@@ -1,7 +1,6 @@
 package fi.nylen.lzw;
 
 import java.util.Arrays;
-import static fi.nylen.lzw.MathUtil.nextPrime;
 
 /**
  * Structure for adding and retrieving string entries in LZW compression.
@@ -12,7 +11,6 @@ public class StringTable {
     private int nextCode = CLEAR_CODE+1;
     private int bitMask;
     private int bits;
-    private int tableSize;
     private int[] prefixCodes;
     private byte[] appendCharacters;
     private int[] codeValues;
@@ -24,9 +22,9 @@ public class StringTable {
      * @param codeWidth the code width
      */
     public StringTable(int codeWidth) {
-        tableSize = (int)Math.pow(2, codeWidth);
+        int tableSize = (int)Math.pow(2, codeWidth);
         bits = codeWidth;
-        bitMask = (int)Math.pow(2, codeWidth)-1;
+        bitMask = tableSize-1;
         prefixCodes = new int[tableSize];
         appendCharacters = new byte[tableSize];
         codeValues = new int[tableSize];
