@@ -33,25 +33,21 @@ public class TranslationTable {
 
     public byte[] translate(int code) {
         int originalCode = code;
-        if (translated[code] == null) {
-            int length = 0;
+        int length       = 0;
+        byte[] prefix    = translated[code];
+        
+        if (prefix != null) {
+            return prefix;
+        } else {
             while (code > StringTable.CLEAR_CODE) {
-                byte[] prefix = translated[code];
-                if (prefix == null) {
-                    decodeStack[length] = appendCharacters[code];
-                    code = prefixCodes[code];
-                    length++;
-                } else {
-                    System.arraycopy(prefix, 0, decodeStack, length, prefix.length);
-                    length += prefix.length;
-                    break;
-                }       
+                decodeStack[length] = appendCharacters[code];
+                code = prefixCodes[code];
+                length++;
             }
 
-            decodeStack[length++] = (byte)code;
+            decodeStack[length++]    = (byte)code;
             translated[originalCode] = ArrayUtils.reverse(decodeStack, 0, length);
-            return translated[originalCode];
-        } else {
+
             return translated[originalCode];
         }
     }

@@ -41,17 +41,20 @@ public class TranslationTableTest {
     @Test
     public void shouldTranslate() {
         int code;
-        code = table.add(ord('H'), (byte)'E');
-        code = table.add(code, (byte)'L');
-        code = table.add(code, (byte)'L');
-        code = table.add(code, (byte)'O');
+        code = table.add(ord('H'), (byte)'E'); // 258
+        code = table.add(code, (byte)'L');     // 259
+        code = table.add(code, (byte)'L');     // 260
+        code = table.add(code, (byte)'O');     // 261
 
         byte[] expected   = "HELLO".getBytes();
         byte[] translated = table.translate(code);
         assertArrayEquals(expected, translated);
 
         // should cache results for faster lookup
-        byte[] translatedSecondTime = table.translate(code);
-        assertEquals(translated, translatedSecondTime);
+        byte[] translateSecondTime = table.translate(code);
+        assertEquals(translated, translateSecondTime);
+
+        byte[] translatePartial = table.translate(260);
+        assertArrayEquals("HELL".getBytes(), translatePartial);
     }
 }
