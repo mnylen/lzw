@@ -1,7 +1,5 @@
 package fi.nylen.lzw;
 
-import java.util.Arrays;
-
 public class TranslationTable {
     private int nextCode = StringTable.CLEAR_CODE+1;
     private int[] prefixCodes;
