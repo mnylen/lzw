@@ -32,9 +32,9 @@ public class TranslationTable {
     }
 
     public byte[] translate(int code) {
+        int originalCode = code;
         if (translated[code] == null) {
             int length = 0;
-            int originalCode = code;
             while (code > StringTable.CLEAR_CODE) {
                 byte[] prefix = translated[code];
                 if (prefix == null) {
@@ -44,14 +44,15 @@ public class TranslationTable {
                 } else {
                     System.arraycopy(prefix, 0, decodeStack, length, prefix.length);
                     length += prefix.length;
-                }
+                    break;
+                }       
             }
-        
+
             decodeStack[length++] = (byte)code;
             translated[originalCode] = ArrayUtils.reverse(decodeStack, 0, length);
             return translated[originalCode];
         } else {
-            return translated[code];
+            return translated[originalCode];
         }
     }
 }
