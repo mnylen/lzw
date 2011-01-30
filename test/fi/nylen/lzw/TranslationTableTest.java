@@ -49,5 +49,9 @@ public class TranslationTableTest {
         byte[] expected   = "HELLO".getBytes();
         byte[] translated = table.translate(code);
         assertArrayEquals(expected, translated);
+
+        // should cache results for faster lookup
+        byte[] translatedSecondTime = table.translate(code);
+        assertEquals(translated, translatedSecondTime);
     }
 }
