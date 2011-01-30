@@ -51,7 +51,6 @@ public class TranslationTable {
             translated[originalCode] = ArrayUtils.reverse(decodeStack, 0, length);
             return translated[originalCode];
         } else {
-            System.out.println("just using prefix");
             return translated[code];
         }
     }
