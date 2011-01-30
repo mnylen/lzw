@@ -71,11 +71,7 @@ public class StringTable {
             if (indexEmpty(index) || entryMatchesAt(index, prefixCode, appendCharacter)) {
                 return index;
             } else {
-                index += 1;
-
-                if (index >= tableSize) {
-                    index = 0;
-                }
+                index = (index+1)&bitMask;
             }
         }
     }
@@ -89,7 +85,7 @@ public class StringTable {
     }
 
     private int calculateHash(int prefixCode, byte appendCharacter) {
-        int hash = prefixCode * 37 + appendCharacter * 37;
-        return Math.abs(hash * 31);
+        int hash = ((prefixCode >> (bits) * 37) ^ (prefixCode*37 << (bits-8))) ^ (appendCharacter * 37) & 0xA0E3589F;
+        return Math.abs(hash);
     }
 }
