@@ -42,8 +42,11 @@ public class TranslationTableTest {
     public void shouldTranslate() {
         int code;
         code = table.add(ord('H'), (byte)'E'); // 258
+        table.translate(code);
         code = table.add(code, (byte)'L');     // 259
+        table.translate(code);
         code = table.add(code, (byte)'L');     // 260
+        table.translate(code);
         code = table.add(code, (byte)'O');     // 261
 
         byte[] expected   = "HELLO".getBytes();

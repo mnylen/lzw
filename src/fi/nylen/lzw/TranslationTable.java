@@ -39,13 +39,24 @@ public class TranslationTable {
         if (prefix != null) {
             return prefix;
         } else {
+            boolean prefixFound = false;
             while (code > StringTable.CLEAR_CODE) {
+                if ((prefix = translated[code]) != null) {
+                    System.arraycopy(ArrayUtils.reverse(prefix, 0, prefix.length), 0, decodeStack, length, prefix.length);
+                    length += prefix.length;
+                    prefixFound = true;
+                    break;
+                }
+
                 decodeStack[length] = appendCharacters[code];
                 code = prefixCodes[code];
                 length++;
             }
 
-            decodeStack[length++]    = (byte)code;
+            if (!prefixFound) {
+                decodeStack[length++]    = (byte)code;
+            }
+
             translated[originalCode] = ArrayUtils.reverse(decodeStack, 0, length);
 
             return translated[originalCode];
