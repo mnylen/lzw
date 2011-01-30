@@ -10,6 +10,7 @@ public class StringTable {
     public static final int STOP_CODE = 256;
     public static final int CLEAR_CODE = 257;
     private int nextCode = CLEAR_CODE+1;
+    private int bitMask;
     private int bits;
     private int tableSize;
     private int[] prefixCodes;
@@ -23,9 +24,9 @@ public class StringTable {
      * @param codeWidth the code width
      */
     public StringTable(int codeWidth) {
-        tableSize = nextPrime((int)Math.pow(2, codeWidth));
+        tableSize = (int)Math.pow(2, codeWidth);
         bits = codeWidth;
-
+        bitMask = (int)Math.pow(2, codeWidth)-1;
         prefixCodes = new int[tableSize];
         appendCharacters = new byte[tableSize];
         codeValues = new int[tableSize];
@@ -65,13 +66,13 @@ public class StringTable {
     }
 
     private int findIndex(int prefixCode, byte appendCharacter) {
-        int index  = calculateHash(prefixCode, appendCharacter) % tableSize;
-        
+        int index  = calculateHash(prefixCode, appendCharacter) & bitMask;
         while (true) {
             if (indexEmpty(index) || entryMatchesAt(index, prefixCode, appendCharacter)) {
                 return index;
             } else {
                 index += 1;
+
                 if (index >= tableSize) {
                     index = 0;
                 }
@@ -88,7 +89,7 @@ public class StringTable {
     }
 
     private int calculateHash(int prefixCode, byte appendCharacter) {
-        int hash = (prefixCode << (bits-8)) ^ appendCharacter;
-        return Math.abs(hash);
+        int hash = prefixCode * 37 + appendCharacter * 37;
+        return Math.abs(hash * 31);
     }
 }
