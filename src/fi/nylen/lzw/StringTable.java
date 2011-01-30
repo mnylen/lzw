@@ -65,16 +65,16 @@ public class StringTable {
     }
 
     private int findIndex(int prefixCode, byte appendCharacter) {
-        int probes = 1;
-        int index;
-
+        int index  = calculateHash(prefixCode, appendCharacter) % tableSize;
+        
         while (true) {
-            index = calculateHash(prefixCode, appendCharacter, probes);
-
             if (indexEmpty(index) || entryMatchesAt(index, prefixCode, appendCharacter)) {
                 return index;
             } else {
-                probes += 1;
+                index += 1;
+                if (index >= tableSize) {
+                    index = 0;
+                }
             }
         }
     }
@@ -87,8 +87,8 @@ public class StringTable {
         return prefixCodes[index] == prefixCode && appendCharacters[index] == appendCharacter;
     }
 
-    private int calculateHash(int prefixCode, byte appendCharacter, int probes) {
-        int hash = (prefixCode << (bits-8)) ^ appendCharacter + probes;
-        return Math.abs(hash) % tableSize;
+    private int calculateHash(int prefixCode, byte appendCharacter) {
+        int hash = (prefixCode << (bits-8)) ^ appendCharacter;
+        return Math.abs(hash);
     }
 }
