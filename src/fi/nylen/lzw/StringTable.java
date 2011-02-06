@@ -9,6 +9,7 @@ public class StringTable {
     public static final int STOP_CODE = 256;
     public static final int CLEAR_CODE = 257;
     private int nextCode = CLEAR_CODE+1;
+    private int maxCode;
     private int bitMask;
     private int bits;
     private int[] prefixCodes;
@@ -23,6 +24,7 @@ public class StringTable {
      */
     public StringTable(int codeWidth) {
         int tableSize = (int)Math.pow(2, codeWidth);
+        maxCode = tableSize;
         bits = codeWidth;
         bitMask = tableSize-1;
         prefixCodes = new int[tableSize];
@@ -42,15 +44,24 @@ public class StringTable {
     }
 
     /**
-     * Adds an entry to the table.
+     * @return <code>true</code> if the table is full, <code>false</code> otherwise
+     */
+    public boolean isFull() {
+        return nextCode == maxCode;
+    }
+
+    /**
+     * Adds an entry to the table. If the table is full, ignores the add.
      * @param prefixCode the prefix code
      * @param appendCharacter the append character
      */
     public void add(int prefixCode, byte appendCharacter) {
-        int index = findIndex(prefixCode, appendCharacter);
-        prefixCodes[index] = prefixCode;
-        appendCharacters[index] = appendCharacter;
-        codeValues[index] = nextCode++;
+        if (!(isFull())) {
+            int index = findIndex(prefixCode, appendCharacter);
+            prefixCodes[index] = prefixCode;
+            appendCharacters[index] = appendCharacter;
+            codeValues[index] = nextCode++;
+        }
     }
 
     /**
