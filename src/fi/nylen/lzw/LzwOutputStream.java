@@ -10,6 +10,7 @@ public class LzwOutputStream extends OutputStream {
     private CodeWriter writer;
     private int codeWidth;
     private int maxCodeWidth;
+    private StringTable table;
 
     /**
      * Creates an output stream that writes LZW compressed bytes to the underlying
@@ -19,9 +20,7 @@ public class LzwOutputStream extends OutputStream {
      * @param out stream to write to
      */
     public LzwOutputStream(int initialCodeWidth, int maxCodeWidth, OutputStream out) {
-        this.codeWidth    = initialCodeWidth;
-        this.maxCodeWidth = maxCodeWidth;
-        this.writer       = new CodeWriter(out, codeWidth);
+        this(initialCodeWidth, maxCodeWidth, new CodeWriter(out, initialCodeWidth));
     }
 
     /**
@@ -35,6 +34,7 @@ public class LzwOutputStream extends OutputStream {
         this.codeWidth    = initialCodeWidth;
         this.maxCodeWidth = maxCodeWidth;
         this.writer       = writer;
+        this.table        = new StringTable(maxCodeWidth);
     }
 
     /**
