@@ -31,8 +31,8 @@ public class CliOptions {
         return fileName;
     }
 
-    public static CliOptions fromArgs(String[] args) {
-        Lzw.Action action = Lzw.Action.valueOf(args[0].toUpperCase());
+    public static CliOptions fromArgs(String[] args) throws IllegalOptionsException {
+        Lzw.Action action = parseAction(args);
         int codeWidth = DEFAULT_CODE_WIDTH;
         int maxCodeWidth = -1;
         String fileName = args[args.length-1];
@@ -52,5 +52,19 @@ public class CliOptions {
         }
 
         return new CliOptions(action, codeWidth, maxCodeWidth, fileName);
+    }
+
+    private static Lzw.Action parseAction(String[] args) {
+        if (args.length < 0) {
+            throw new IllegalOptionsException();
+        } else {
+            String actionName = args[0].toUpperCase();
+
+            try {
+                return Lzw.Action.valueOf(actionName);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalOptionsException();
+            }
+        }
     }
 }

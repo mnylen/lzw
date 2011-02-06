@@ -33,4 +33,13 @@ public class CliOptionsTest {
         assertEquals(CliOptions.DEFAULT_CODE_WIDTH, opts.getCodeWidth());
         assertEquals(CliOptions.DEFAULT_CODE_WIDTH, opts.getMaxCodeWidth());
     }
+
+    @Test
+    public void testFromArgsWithoutAction() {
+        try {
+            CliOptions.fromArgs(new String[] { "--code-width=18", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+        }
+    }
 }
