@@ -15,4 +15,22 @@ public class CliOptionsTest {
         assertEquals(30, opts.getMaxCodeWidth());
         assertEquals("file.txt", opts.getFileName());
     }
+
+    @Test
+    public void testFromArgsWithoutMaxCodeWidth() {
+        CliOptions opts = CliOptions.fromArgs(
+                new String[] { "compress", "--code-width=18", "file.txt" });
+
+        assertEquals(18, opts.getCodeWidth());
+        assertEquals(18, opts.getMaxCodeWidth());
+    }
+
+    @Test
+    public void testFromArgsWithoutCodeWidth() {
+        CliOptions opts = CliOptions.fromArgs(
+                new String[] { "compress", "file.txt" });
+
+        assertEquals(CliOptions.DEFAULT_CODE_WIDTH, opts.getCodeWidth());
+        assertEquals(CliOptions.DEFAULT_CODE_WIDTH, opts.getMaxCodeWidth());
+    }
 }
