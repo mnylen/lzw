@@ -21,17 +21,31 @@ public class LzwOutputStreamTest {
 
     @Test
     public void testWrite() throws IOException {
-        out.write((int)'H'); // writes 72
-        out.write((int)'e'); // writes 101: He      = 258
-        out.write((int)'l'); // writes 108: Hel     = 259
-        out.write((int)'l'); // writes 108: Hell    = 260
-        out.write((int)'o'); // writes 111: Hello   = 261
+        out.write((int)'H');
+        out.write((int)'e');
+        out.write((int)'l');
+        out.write((int)'l');
+        out.write((int)'o');
         out.write(new byte[] { 'H', 'e', 'l', 'l', 'o' });
-        out.finish(); // writes stop code and flushes anything
+        out.finish();
 
-        assertEquals(8, writer.count());
-        int[] expectedWrites = new int[] { 72, 101, 108, 108, 111, 261, StringTable.STOP_CODE, 0 };
-        for (int i = 0; i < 8; i++) {
+        /*
+          | Character input | Code output | New code value | New string |
+          |        He       |      H      |      258       |    He      |
+          |        l        |      e      |      259       |    el      |
+          |        l        |      l      |      260       |    ll      |
+          |        o        |      l      |      261       |    lo      |
+          |        H        |      o      |      262       |    oH      |
+          |        e        |     ----    |                |            |
+          |        l        |     258     |      263       |    Hel     |
+          |        l        |     ----    |                |            |
+          |        o        |     260     |      264       |    llo     |
+          |       EOF       |      o      |      ---       |    ---     |
+         */
+
+        assertEquals(10, writer.count()); // 8 writes + stop code + zero for flushing
+        int[] expectedWrites = new int[] { 72,  101, 108, 108, 111, 258, 260, 111, StringTable.STOP_CODE, 0};
+        for (int i = 0; i < expectedWrites.length; i++) {
             assertEquals(expectedWrites[i], writer.codes()[i]);
         }
     }

@@ -11,6 +11,7 @@ public class LzwOutputStream extends OutputStream {
     private int codeWidth;
     private int maxCodeWidth;
     private StringTable table;
+    private int prefixCode = -1;
 
     /**
      * Creates an output stream that writes LZW compressed bytes to the underlying
@@ -44,7 +45,18 @@ public class LzwOutputStream extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
-        
+        if (prefixCode == -1) {
+            prefixCode = b;
+        } else {
+            int newPrefixCode = table.codeValue(prefixCode, (byte)b);
+            if (newPrefixCode != -1) {
+                prefixCode = newPrefixCode;
+            } else {
+                writer.write(prefixCode);
+                table.add(prefixCode, (byte)b);
+                prefixCode = b;
+            }
+        }
     }
 
     /**
@@ -53,6 +65,8 @@ public class LzwOutputStream extends OutputStream {
      * @throws IOException if anything goes wrong
      */
     public void finish() throws IOException {
-        
+        writer.write(prefixCode);
+        writer.write(StringTable.STOP_CODE);
+        writer.flush();
     }
 }
