@@ -7,7 +7,6 @@ import java.io.OutputStream;
  * <code>OutputStream</code> for outputting bytes as LZW.
  */
 public class LzwOutputStream extends OutputStream {
-    private OutputStream out;
     private CodeWriter writer;
     private int codeWidth;
     private int maxCodeWidth;
@@ -22,8 +21,20 @@ public class LzwOutputStream extends OutputStream {
     public LzwOutputStream(int initialCodeWidth, int maxCodeWidth, OutputStream out) {
         this.codeWidth    = initialCodeWidth;
         this.maxCodeWidth = maxCodeWidth;
-        this.out          = out;
         this.writer       = new CodeWriter(out, codeWidth);
+    }
+
+    /**
+     * Creates an output stream that writes LZW compressed bytes using the
+     * writer.
+     * @param initialCodeWidth initial code width for compression
+     * @param maxCodeWidth maximum code width for compression
+     * @param writer writer to use
+     */
+    protected LzwOutputStream(int initialCodeWidth, int maxCodeWidth, CodeWriter writer) {
+        this.codeWidth    = initialCodeWidth;
+        this.maxCodeWidth = maxCodeWidth;
+        this.writer       = writer;
     }
 
     /**
@@ -33,6 +44,15 @@ public class LzwOutputStream extends OutputStream {
      */
     @Override
     public void write(int b) throws IOException {
+        
+    }
+
+    /**
+     * Finishes the compression by writing out stop code and by flushing
+     * anything that haven't been written yet.
+     * @throws IOException if anything goes wrong
+     */
+    public void finish() throws IOException {
         
     }
 }
