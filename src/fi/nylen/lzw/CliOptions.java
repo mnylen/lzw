@@ -56,14 +56,14 @@ public class CliOptions {
 
     private static Lzw.Action parseAction(String[] args) {
         if (args.length < 0) {
-            throw new IllegalOptionsException();
+            throw new IllegalOptionsException("Invalid action: one of 'compress', 'decompress' expected");
         } else {
             String actionName = args[0].toUpperCase();
 
             try {
                 return Lzw.Action.valueOf(actionName);
             } catch (IllegalArgumentException e) {
-                throw new IllegalOptionsException();
+                throw new IllegalOptionsException("Invalid action: one of 'compress', 'decompress' expected");
             }
         }
     }

@@ -40,6 +40,7 @@ public class CliOptionsTest {
             CliOptions.fromArgs(new String[] { "--code-width=18", "file.txt" });
             fail();
         } catch (IllegalOptionsException e) {
+            assertEquals("Invalid action: one of 'compress', 'decompress' expected", e.getMessage());
         }
     }
 }
