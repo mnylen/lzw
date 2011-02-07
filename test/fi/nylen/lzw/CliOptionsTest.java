@@ -69,4 +69,34 @@ public class CliOptionsTest {
             assertEquals("Unknown option: --hello-world", e.getMessage());
         }
     }
+
+    @Test
+    public void testFromArgsWithEmptyValueForCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--code-width=", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --code-width must be numeric value", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsWithNoValueForCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--code-width", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --code-width must be numeric value", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsWithNonNumericValueForCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--code-width=lorem", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --code-width must be numeric value", e.getMessage());
+        }
+    }
 }

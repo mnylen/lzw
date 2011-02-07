@@ -74,7 +74,7 @@ public class CliOptions {
         if (arg.indexOf('=') != -1) {
             return arg.substring(arg.indexOf('=')+1);
         } else {
-            return arg;
+            return "";
         }
     }
 
@@ -92,8 +92,16 @@ public class CliOptions {
         }
     }
 
-    private static int parseNumericOption(String optionName, String arg) {
-        return Integer.parseInt(arg.substring(arg.indexOf("=")+1));
+    private static int parseNumericOption(String optionName, String optionValue) {
+        if (optionValue.isEmpty()) {
+            throw new IllegalOptionsException("Invalid value: " + optionName + " must be numeric value");
+        }
+
+        try {
+            return Integer.parseInt(optionValue);
+        } catch (NumberFormatException e) {
+            throw new IllegalOptionsException("Invalid value: " + optionName + " must be numeric value");
+        }
     }
 
     private static String parseFileName(String[] args, int off) {
