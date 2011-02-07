@@ -59,4 +59,14 @@ public class CliOptionsTest {
         CliOptions opts = CliOptions.fromArgs(new String[] { "compress", "fileName1", "fileName2", "fileName3"} );
         assertEquals("fileName1", opts.getFileName());
     }
+
+    @Test
+    public void testFromArgsDoesNotAllowUnknownOptions() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--hello-world", "file.txt"} );
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Unknown option: --hello-world", e.getMessage());
+        }
+    }
 }

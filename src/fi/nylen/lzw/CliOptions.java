@@ -40,17 +40,19 @@ public class CliOptions {
 
         while (off < args.length) {
             String arg = args[off];
-            
-            if (!(arg.startsWith("--"))) {
-                break;
-            } else {
-                if (arg.startsWith("--code-width")) {
-                    codeWidth = parseNumericOption("--code-width", arg);
-                } else if (arg.startsWith("--max-code-width")) {
-                    maxCodeWidth = parseNumericOption("--max-code-width", arg);
-                }
-                
+            String optionName = parseOptionName(arg);
+            String optionValue = parseOptionValue(arg);
+
+            if (optionName.equals("--code-width")) {
+                codeWidth = parseNumericOption("--code-width", optionValue);
                 off++;
+            } else if (optionName.equals("--max-code-width")) {
+                maxCodeWidth = parseNumericOption("--max-code-width", optionValue);
+                off++;
+            } else if (optionName.startsWith("--")) {
+                throw new IllegalOptionsException("Unknown option: " + optionName);
+            } else {
+                break;
             }
         }
 
@@ -58,6 +60,22 @@ public class CliOptions {
         maxCodeWidth = (maxCodeWidth != -1) ? maxCodeWidth : codeWidth;
         
         return new CliOptions(action, codeWidth, maxCodeWidth, fileName);
+    }
+
+    private static String parseOptionName(String arg) {
+        if (arg.indexOf('=') != -1) {
+            return arg.substring(0, arg.indexOf('='));
+        } else {
+            return arg;
+        }
+    }
+
+    private static String parseOptionValue(String arg) {
+        if (arg.indexOf('=') != -1) {
+            return arg.substring(arg.indexOf('=')+1);
+        } else {
+            return arg;
+        }
     }
 
     private static Lzw.Action parseAction(String[] args) {
