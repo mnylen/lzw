@@ -32,25 +32,31 @@ public class CliOptions {
     }
 
     public static CliOptions fromArgs(String[] args) throws IllegalOptionsException {
-        Lzw.Action action = parseAction(args);
         int codeWidth = DEFAULT_CODE_WIDTH;
         int maxCodeWidth = -1;
-        String fileName = args[args.length-1];
-        
-        for (int i = 1; i < (args.length-1); i++) {
-            String arg = args[i];
 
-            if (arg.startsWith("--code-width")) {
-                codeWidth = Integer.parseInt(arg.substring(arg.indexOf('=')+1));
-            } else if (arg.startsWith("--max-code-width")) {
-                maxCodeWidth = Integer.parseInt(arg.substring(arg.indexOf('=')+1));
+        Lzw.Action action = parseAction(args);
+        int off = 1;
+
+        while (off < args.length) {
+            String arg = args[off];
+            
+            if (!(arg.startsWith("--"))) {
+                break;
+            } else {
+                if (arg.startsWith("--code-width")) {
+                    codeWidth = parseNumericOption("--code-width", arg);
+                } else if (arg.startsWith("--max-code-width")) {
+                    maxCodeWidth = parseNumericOption("--max-code-width", arg);
+                }
+                
+                off++;
             }
         }
 
-        if (maxCodeWidth == -1) {
-            maxCodeWidth = codeWidth;
-        }
-
+        String fileName = parseFileName(args, off);
+        maxCodeWidth = (maxCodeWidth != -1) ? maxCodeWidth : codeWidth;
+        
         return new CliOptions(action, codeWidth, maxCodeWidth, fileName);
     }
 
@@ -65,6 +71,18 @@ public class CliOptions {
             } catch (IllegalArgumentException e) {
                 throw new IllegalOptionsException("Invalid action: one of 'compress', 'decompress' expected");
             }
+        }
+    }
+
+    private static int parseNumericOption(String optionName, String arg) {
+        return Integer.parseInt(arg.substring(arg.indexOf("=")+1));
+    }
+
+    private static String parseFileName(String[] args, int off) {
+        if (off < args.length) {
+            return args[off];
+        } else {
+            throw new IllegalOptionsException("No file given");
         }
     }
 }

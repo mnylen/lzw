@@ -43,4 +43,20 @@ public class CliOptionsTest {
             assertEquals("Invalid action: one of 'compress', 'decompress' expected", e.getMessage());
         }
     }
+
+    @Test
+    public void testFromArgsWithoutFileName() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--code-width=18" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("No file given", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsIgnoresExcessFileNames() {
+        CliOptions opts = CliOptions.fromArgs(new String[] { "compress", "fileName1", "fileName2", "fileName3"} );
+        assertEquals("fileName1", opts.getFileName());
+    }
 }
