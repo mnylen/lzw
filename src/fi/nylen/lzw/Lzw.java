@@ -17,6 +17,18 @@ public class Lzw {
         this.options = options;
     }
 
+    public static void main(String[] args) {
+        try {
+            new Lzw(CliOptions.fromArgs(args)).run();
+        } catch (IOException ioe) {
+            System.out.println("lzw: Could not complete your action: " + ioe.getMessage());
+        } catch (IllegalOptionsException ioe) {
+            System.out.println(ioe.getMessage());
+            System.out.println("Usage: lzw compress [option...] FILE");
+            System.out.println("       lzw decompress [option...] FILE");
+        }
+    }
+
     public void run() throws IOException {
         if (options.getAction() == Action.COMPRESS) {
             compress();
