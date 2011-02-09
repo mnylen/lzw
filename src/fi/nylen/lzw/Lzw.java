@@ -47,18 +47,25 @@ public class Lzw {
         byte[] input = new byte[4096];
         int bytesRead;
         int i = 0;
-        
-        while ( ( bytesRead = fis.read(input) ) != -1 ) {
-            if (i % 10 == 0) {
-                System.out.print("*");
-            }
-            
-            lzw.write(input, 0, bytesRead);
-            i++;
-        }
 
-        lzw.finish();
-        lzw.close();
+        try {
+            while ( ( bytesRead = fis.read(input) ) != -1 ) {
+                if (i % 10 == 0) {
+                    System.out.print("*");
+                }
+
+                lzw.write(input, 0, bytesRead);
+                i++;
+            }
+
+            lzw.finish();
+        } finally {
+            try {
+                lzw.close();
+            } finally {
+                fis.close();
+            }
+        }
         
         System.out.println();
     }
