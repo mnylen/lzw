@@ -35,7 +35,12 @@ public class LzwTest {
         byte[] data = new byte[(int)file.length()];
         FileInputStream is = new FileInputStream(file);
 
-        assertTrue(is.read(data) == file.length());
+        try {
+            assertTrue(is.read(data) == file.length());
+        } finally {
+            is.close();
+        }
+        
         return data;
     }
 
@@ -43,12 +48,16 @@ public class LzwTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         LzwOutputStream os = new LzwOutputStream(codeWidth, maxCodeWidth, baos);
 
-        File file = new File(fileName);
-        byte[] data = readInFile(file);
+        try {
+            File file = new File(fileName);
+            byte[] data = readInFile(file);
 
-        os.write(data);
-        os.finish();
-        os.close();
+            os.write(data);
+            os.finish();
+        } finally {
+            os.close();    
+        }
+
         return baos.toByteArray();
     }
 }
