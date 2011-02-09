@@ -32,14 +32,23 @@ public class Lzw {
                 new FileOutputStream(outputFile));
 
         FileInputStream fis = new FileInputStream(inputFile);
-        byte[] input = new byte[1024];
+        byte[] input = new byte[4096];
         int bytesRead;
+        int i = 0;
+        
         while ( ( bytesRead = fis.read(input) ) != -1 ) {
+            if (i % 10 == 0) {
+                System.out.print("*");
+            }
+            
             lzw.write(input, 0, bytesRead);
+            i++;
         }
 
         lzw.finish();
         lzw.close();
+        
+        System.out.println();
     }
 
     private File createOutputFile() {
