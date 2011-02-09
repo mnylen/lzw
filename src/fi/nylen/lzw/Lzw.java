@@ -38,16 +38,22 @@ public class Lzw {
     private void compress() throws IOException {
         File inputFile = new File(options.getFileName());
         File outputFile = createOutputFile();
-        LzwOutputStream lzw = createLzwOutputStream(outputFile);
-        FileInputStream fis = new FileInputStream(inputFile);
+        LzwOutputStream lzw = null;
+        FileInputStream fis = null;
         
         try {
+            lzw = createLzwOutputStream(outputFile);
+            fis = new FileInputStream(inputFile);
             writeCompressedData(fis, lzw);
         } finally {
             try {
-                lzw.close();
+                if (lzw != null) {
+                    lzw.close();
+                }
             } finally {
-                fis.close();
+                if (fis != null) {
+                    fis.close();
+                }
             }
         }
         
