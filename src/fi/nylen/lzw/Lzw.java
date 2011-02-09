@@ -38,27 +38,11 @@ public class Lzw {
     private void compress() throws IOException {
         File inputFile = new File(options.getFileName());
         File outputFile = createOutputFile();
-        LzwOutputStream lzw = new LzwOutputStream(
-                options.getCodeWidth(),
-                options.getMaxCodeWidth(),
-                new FileOutputStream(outputFile));
-
+        LzwOutputStream lzw = createLzwOutputStream(outputFile);
         FileInputStream fis = new FileInputStream(inputFile);
-        byte[] input = new byte[4096];
-        int bytesRead;
-        int i = 0;
-
+        
         try {
-            while ( ( bytesRead = fis.read(input) ) != -1 ) {
-                if (i % 10 == 0) {
-                    System.out.print("*");
-                }
-
-                lzw.write(input, 0, bytesRead);
-                i++;
-            }
-
-            lzw.finish();
+            writeCompressedData(fis, lzw);
         } finally {
             try {
                 lzw.close();
@@ -68,6 +52,30 @@ public class Lzw {
         }
         
         System.out.println();
+    }
+
+    private LzwOutputStream createLzwOutputStream(File outputFile) throws IOException {
+        return new LzwOutputStream(
+                options.getCodeWidth(),
+                options.getMaxCodeWidth(),
+                new FileOutputStream(outputFile));
+    }
+
+    private void writeCompressedData(FileInputStream from, LzwOutputStream to) throws IOException {
+        byte[] input = new byte[4096];
+        int bytesRead;
+        int i = 0;
+
+        while ( ( bytesRead = from.read(input) ) != -1 ) {
+            if (i % 10 == 0) {
+                System.out.print("*");
+             }
+
+            to.write(input, 0, bytesRead);
+             i++;
+        }
+
+        to.finish();
     }
 
     private File createOutputFile() {
