@@ -5,18 +5,33 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Utility program for compressing files with LZW and decompressing already
+ * compressed files.
+ */
 public class Lzw {
+    /**
+     * Available actions.
+     */
     public enum Action {
         COMPRESS,
         DECOMPRESS
     }
 
     private CliOptions options;
-    
+
+    /**
+     * Creates a new <code>Lzw</code> for the given options.
+     * @param options options
+     */
     public Lzw(CliOptions options) {
         this.options = options;
     }
 
+    /**
+     * The main program.
+     * @param args program arguments
+     */
     public static void main(String[] args) {
         try {
             new Lzw(CliOptions.fromArgs(args)).run();
@@ -29,11 +44,15 @@ public class Lzw {
         }
     }
 
+    /**
+     * Runs the desired action.
+     * @throws IOException if anything goes wrong
+     */
     public void run() throws IOException {
         if (options.getAction() == Action.COMPRESS) {
             compress();
         }
-    }
+    }    
 
     private void compress() throws IOException {
         File inputFile = new File(options.getFileName());
