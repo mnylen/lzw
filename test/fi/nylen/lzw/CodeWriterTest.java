@@ -48,4 +48,16 @@ public class CodeWriterTest {
         assertEquals(2, out.count());
         assertEquals((byte)(1<<7), out.bytes()[1]);
     }
+
+    @Test
+    public void testWriteCodeAfterCodeWidthIncreased() throws IOException {
+        writer = new CodeWriter(out, 8);
+        writer.write(1);
+        writer.increaseCodeWidth();
+        writer.write(1);
+
+        assertEquals(2, out.count());
+        assertEquals((byte)1, out.bytes()[0]);
+        assertEquals((byte)(1<<8), out.bytes()[2]);
+    }
 }

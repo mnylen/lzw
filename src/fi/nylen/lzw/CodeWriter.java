@@ -25,6 +25,10 @@ public class CodeWriter {
         this.out  = out;
     }
 
+    public void increaseCodeWidth() {
+        codeWidth++;
+    }
+
     /**
      * Writes code.
      * @param code the code
