@@ -53,7 +53,11 @@ public class LzwOutputStream extends OutputStream {
                 prefixCode = newPrefixCode;
             } else {
                 writer.write(prefixCode);
-                table.add(prefixCode, (byte)b);
+
+                if (table.add(prefixCode, (byte)b) && codeWidthNeedsToBeIncreased()) {
+                    writer.increaseCodeWidth();
+                }
+                
                 prefixCode = b;
             }
         }
@@ -68,5 +72,10 @@ public class LzwOutputStream extends OutputStream {
         writer.write(prefixCode);
         writer.write(StringTable.STOP_CODE);
         writer.flush();
+    }
+
+    private boolean codeWidthNeedsToBeIncreased() {
+        int maxCodeForCurrentWidth = (int)Math.pow(2, codeWidth);
+        return !(codeWidth >= maxCodeWidth) && table.nextCode() >= maxCodeForCurrentWidth;
     }
 }
