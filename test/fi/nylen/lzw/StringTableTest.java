@@ -25,10 +25,10 @@ public class StringTableTest {
     @Test
     public void testAddNextCode() {
         int codeValueForLZ = table.nextCode();
-        assertEquals(true, table.add(ord('L'), (byte)'Z'));
+        assertTrue(table.add(ord('L'), (byte)'Z'));
 
         int codeValueForHI = table.nextCode();
-        assertEquals(true, table.add(ord('H'), (byte)'I'));
+        assertTrue(table.add(ord('H'), (byte)'I'));
 
         assertEquals(codeValueForLZ, table.codeValue(ord('L'), (byte)'Z'));
         assertEquals(codeValueForHI, table.codeValue(ord('H'), (byte)'I'));
@@ -37,7 +37,7 @@ public class StringTableTest {
     @Test
     public void testAddWhenTableIsFull() {
         table = new StringTable(3);
-        assertEquals(false, table.add(ord('L'), (byte)'Z'));
+        assertFalse(table.add(ord('L'), (byte)'Z'));
         assertEquals(-1, table.codeValue(ord('L'), (byte)'Z'));
     }
 }
