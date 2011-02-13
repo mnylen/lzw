@@ -56,6 +56,7 @@ public class LzwOutputStream extends OutputStream {
 
                 if (table.add(prefixCode, (byte)b) && codeWidthNeedsToBeIncreased()) {
                     writer.increaseCodeWidth();
+                    codeWidth++;
                 }
                 
                 prefixCode = b;
