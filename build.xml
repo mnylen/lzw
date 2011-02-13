@@ -1,0 +1,52 @@
+<project name="lzw" default="test" basedir=".">
+    <property name="src.java.dir" value="${basedir}/src" />
+    <property name="src.test.dir" value="${basedir}/test" />
+    <property name="build.dir" value="${basedir}/build/java" />
+    <property name="build.test.dir" value="${basedir}/build/test" />
+    <property name="lib.dir" value="${basedir}/lib" />
+
+    <path id="test.classpath">
+        <pathelement path="${lib.dir}/junit-4.8.2.jar" />
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${build.test.dir}" />
+    </target>
+
+    <target name="mkdirs">
+        <mkdir dir="${src.java.dir}" />
+        <mkdir dir="${src.test.dir}" />
+        <mkdir dir="${build.test.dir}" />
+        <mkdir dir="${build.dir}" />
+    </target>
+
+    <target name="compile" depends="mkdirs">
+        <javac srcdir="${src.java.dir}" destdir="${build.dir}" />
+    </target>
+
+    <target name="compile-test" depends="compile">
+        <javac srcdir="${src.test.dir}" destdir="${build.test.dir}">
+            <classpath>
+                <path refid="test.classpath" />
+                <pathelement location="${build.dir}" />
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="test" depends="compile-test">
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath>
+                <path refid="test.classpath" />
+                <pathelement location="${build.dir}" />
+                <pathelement location="${build.test.dir}" />
+            </classpath>
+
+            <batchtest fork="yes">
+                <fileset dir="${src.test.dir}">
+                    <include name="**/*Test.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+</project>
