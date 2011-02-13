@@ -3,6 +3,7 @@
     <property name="src.test.dir" value="${basedir}/test" />
     <property name="build.dir" value="${basedir}/build/java" />
     <property name="build.test.dir" value="${basedir}/build/test" />
+    <property name="dist.dir" value="${basedir}/dist" />
     <property name="lib.dir" value="${basedir}/lib" />
 
     <path id="test.classpath">
@@ -12,6 +13,7 @@
     <target name="clean">
         <delete dir="${build.dir}" />
         <delete dir="${build.test.dir}" />
+        <delete dir="${dist.dir}" />
     </target>
 
     <target name="mkdirs">
@@ -19,6 +21,7 @@
         <mkdir dir="${src.test.dir}" />
         <mkdir dir="${build.test.dir}" />
         <mkdir dir="${build.dir}" />
+        <mkdir dir="${dist.dir}" />
     </target>
 
     <target name="compile" depends="mkdirs">
@@ -48,5 +51,13 @@
                 </fileset>
             </batchtest>
         </junit>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${dist.dir}/lzw.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="fi.nylen.lzw.Lzw" />
+            </manifest>
+        </jar>
     </target>
 </project>
