@@ -47,20 +47,25 @@ public class StringTable {
      * @return <code>true</code> if the table is full, <code>false</code> otherwise
      */
     public boolean isFull() {
-        return nextCode == maxCode;
+        return nextCode > maxCode;
     }
 
     /**
      * Adds an entry to the table. If the table is full, ignores the add.
      * @param prefixCode the prefix code
      * @param appendCharacter the append character
+     * @return <code>true</code> if the entry was added; <code>false</code> otherwise
      */
-    public void add(int prefixCode, byte appendCharacter) {
+    public boolean add(int prefixCode, byte appendCharacter) {
         if (!(isFull())) {
             int index = findIndex(prefixCode, appendCharacter);
             prefixCodes[index] = prefixCode;
             appendCharacters[index] = appendCharacter;
             codeValues[index] = nextCode++;
+
+            return true;
+        } else {
+            return false;
         }
     }
 
