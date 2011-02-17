@@ -19,36 +19,39 @@ public class LzwInputStreamTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         LzwOutputStream out = new LzwOutputStream(12, 12, baos);
         out.write("/WED/WE/WEE/WEB/WET".getBytes());
+        out.finish();
 
-        InputStream in = new ByteArrayInputStream(baos.toByteArray());
+        ByteArrayInputStream in = new ByteArrayInputStream(baos.toByteArray());
         lzw = new LzwInputStream(12, 12, in);
     }
 
     @Test
-    public void testRead() {
-        assertNextReadEquals('/', false);
-        assertNextReadEquals('W', false);
-        assertNextReadEquals('E', false);
-        assertNextReadEquals('D', false);
-        assertNextReadEquals('/', false);
-        assertNextReadEquals('W', false);
-        assertNextReadEquals('E', false);
-        assertNextReadEquals('/', false);
-        assertNextReadEquals('W', false);
-        assertNextReadEquals('E', false);
-        assertNextReadEquals('E', false);
-        assertNextReadEquals('/', false);
-        assertNextReadEquals('W', false);
-        assertNextReadEquals('E', false);
-        assertNextReadEquals('B', false);
-        assertNextReadEquals('/', false);
-        assertNextReadEquals('W', false);
-        assertNextReadEquals('E', false);
-        assertNextReadEquals('T', true);
+    public void testRead() throws IOException {
+        assertNextReadEquals('/');
+        assertNextReadEquals('W');
+        assertNextReadEquals('E');
+        assertNextReadEquals('D');
+        assertNextReadEquals('/');
+        assertNextReadEquals('W');
+        assertNextReadEquals('E');
+        assertNextReadEquals('/');
+        assertNextReadEquals('W');
+        assertNextReadEquals('E');
+        assertNextReadEquals('E');
+        assertNextReadEquals('/');
+        assertNextReadEquals('W');
+        assertNextReadEquals('E');
+        assertNextReadEquals('B');
+        assertNextReadEquals('/');
+        assertNextReadEquals('W');
+        assertNextReadEquals('E');
+        assertNextReadEquals('T');
+        assertEquals(-1, lzw.read());
+        assertEquals(0, lzw.available());
     }
 
-    private void assertNextReadEquals(char c, boolean emptyAfter) {
+    private void assertNextReadEquals(char c) throws IOException {
         assertEquals(ord(c), lzw.read());
-        assertEquals( (emptyAfter ? 0 : 1 ), lzw.available());
+        assertEquals(1, lzw.available());
     }
 }
