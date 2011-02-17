@@ -1,5 +1,6 @@
 package fi.nylen.lzw;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -21,7 +22,7 @@ public class LzwOutputStream extends OutputStream {
      * @param out stream to write to
      */
     public LzwOutputStream(int initialCodeWidth, int maxCodeWidth, OutputStream out) {
-        this(initialCodeWidth, maxCodeWidth, new CodeWriter(out, initialCodeWidth));
+        this(initialCodeWidth, maxCodeWidth, new CodeWriter(new BufferedOutputStream(out), initialCodeWidth));
     }
 
     /**

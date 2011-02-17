@@ -51,5 +51,9 @@ public class CodeWriter {
      */
     public void flush() throws IOException {
         write(0);
+
+        if (out != null) {
+            out.flush();
+        }
     }
 }

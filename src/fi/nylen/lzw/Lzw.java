@@ -1,6 +1,9 @@
 package fi.nylen.lzw;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Utility program for compressing files with LZW and decompressing already
@@ -80,7 +83,7 @@ public class Lzw {
         return new LzwOutputStream(
                 options.getCodeWidth(),
                 options.getMaxCodeWidth(),
-                new BufferedOutputStream(new FileOutputStream(outputFile)));
+                new FileOutputStream(outputFile));
     }
 
     private void writeCompressedData(FileInputStream from, LzwOutputStream to) throws IOException {
