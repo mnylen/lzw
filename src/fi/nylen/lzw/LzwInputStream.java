@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-public class LzwInputStream extends FilterInputStream {
+public class LzwInputStream extends InputStream {
     private int maxCodeWidth;
     private int codeWidth;
     private ByteBuffer buffer;
@@ -15,8 +15,6 @@ public class LzwInputStream extends FilterInputStream {
     private TranslationTable table;
 
     public LzwInputStream(int initialCodeWidth, int maxCodeWidth, InputStream in) {
-        super(in);
-
         this.codeWidth    = initialCodeWidth;
         this.maxCodeWidth = maxCodeWidth;
         this.reader       = new CodeReader(in, codeWidth);
@@ -61,17 +59,21 @@ public class LzwInputStream extends FilterInputStream {
             byte[] string = translate(newCode, oldCode, character);
             character = string[0];
 
-            buffer.clear();
-            buffer.put(string, 1, string.length-1);
-            buffer.flip();
-            
+            addToBuffer(string);
             table.add(oldCode, character);
-            
             oldCode = newCode;
 
             return character & 0xFF;
         } else {
             return -1;
+        }
+    }
+
+    private void addToBuffer(byte[] string) {
+        if (string.length > 1) {
+            buffer.clear();
+            buffer.put(string, 1, string.length-1);
+            buffer.flip();
         }
     }
 

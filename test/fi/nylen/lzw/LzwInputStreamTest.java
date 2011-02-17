@@ -50,6 +50,15 @@ public class LzwInputStreamTest {
         assertEquals(0, lzw.available());
     }
 
+    @Test
+    public void testReadInChunks() throws IOException {
+        byte[] decompressed = new byte[19];
+        int bytesRead = lzw.read(decompressed);
+
+        assertEquals(19, bytesRead);
+        assertArrayEquals("/WED/WE/WEE/WEB/WET".getBytes(), decompressed);
+    }
+
     private void assertNextReadEquals(char c) throws IOException {
         assertEquals(ord(c), lzw.read());
         assertEquals(1, lzw.available());
