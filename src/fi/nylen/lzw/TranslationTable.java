@@ -2,6 +2,7 @@ package fi.nylen.lzw;
 
 public class TranslationTable {
     private int nextCode = StringTable.CLEAR_CODE+1;
+    private int maxCode;
     private int[] prefixCodes;
     private byte[] appendCharacters;
     private byte[] decodeStack;
@@ -10,10 +11,11 @@ public class TranslationTable {
 
     public TranslationTable(int codeWidth) {
         tableSize = (int)Math.pow(2, codeWidth);
+        maxCode   = tableSize-1;
         prefixCodes = new int[tableSize];
         appendCharacters = new byte[tableSize];
         decodeStack = new byte[tableSize/2];
-        translated = new byte[tableSize/2][];
+        translated = new byte[tableSize][];
     }
 
     public int nextCode() {
@@ -26,11 +28,15 @@ public class TranslationTable {
 
     public int add(int prefixCode, byte appendCharacter) {
         int code = nextCode;
-        prefixCodes[code] = prefixCode;
-        appendCharacters[code] = appendCharacter;
-        nextCode++;
+        if (code <= maxCode) {
+            prefixCodes[code] = prefixCode;
+            appendCharacters[code] = appendCharacter;
+            nextCode++;
         
-        return code;
+            return code;
+        } else {
+            return -1;
+        }
     }
 
     public byte[] translate(int code) {

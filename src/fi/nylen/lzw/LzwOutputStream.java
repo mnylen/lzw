@@ -8,6 +8,7 @@ import java.io.OutputStream;
  * <code>OutputStream</code> for outputting bytes as LZW.
  */
 public class LzwOutputStream extends OutputStream {
+    private static final int BYTE_TO_INT_MASK = 0xFF;
     private CodeWriter writer;
     private int codeWidth;
     private int maxCodeWidth;
@@ -54,14 +55,27 @@ public class LzwOutputStream extends OutputStream {
                 prefixCode = newPrefixCode;
             } else {
                 writer.write(prefixCode);
+                table.add(prefixCode, (byte)b);
 
-                if (table.add(prefixCode, (byte)b) && codeWidthNeedsToBeIncreased()) {
+                if (codeWidthNeedsToBeIncreased()) {
                     writer.increaseCodeWidth();
                     codeWidth++;
                 }
-                
+
                 prefixCode = b;
+
+                if (prefixCode <= 0) {
+                    System.out.println("prefix code is <= 0: " + prefixCode + ", b = " + b);
+                }
             }
+        }
+    }
+
+    @Override
+    public void write(byte[] input, int off, int len) throws IOException {
+        for (int i = off; i < len; i++) {
+            int b = input[i] & BYTE_TO_INT_MASK;
+            write(b);
         }
     }
 

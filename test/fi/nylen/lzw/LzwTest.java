@@ -15,20 +15,41 @@ public class LzwTest {
 
     @After
     public void tearDown() {
-        File file = new File("eng_com.dic.lzw");
-        if (file.exists()) {
-            file.delete();
+        File inputFile = new File("eng_com.dic.lzw");
+        if (inputFile.exists()) {
+            inputFile.delete();
+        }
+
+        File outputFile = new File("eng_com.dic");
+        if (outputFile.exists()) {
+            outputFile.delete();
         }
     }
 
     @Test
-    public void testCompress() throws IOException {
+    public void testCompressAndDecompress() throws IOException {
+        testCompress();
+        testDecompress();
+    }
+
+    private void testCompress() throws IOException {
         lzw = new Lzw(new CliOptions(Lzw.Action.COMPRESS, 12, 12, "test/fi/nylen/lzw/eng_com.dic"));
         lzw.run();
 
         File file = new File("eng_com.dic.lzw");
         assertTrue(file.exists());
         assertArrayEquals(compressFile("test/fi/nylen/lzw/eng_com.dic", 12, 12), readInFile(file));
+    }
+
+
+    private void testDecompress() throws IOException {
+        lzw = new Lzw(new CliOptions(Lzw.Action.DECOMPRESS, 12, 12, "eng_com.dic.lzw"));
+        lzw.run();
+
+        File originalFile = new File("test/fi/nylen/lzw/eng_com.dic");
+        File outputFile   = new File("eng_com.dic");
+        assertTrue(outputFile.exists());
+        assertArrayEquals(readInFile(originalFile), readInFile(outputFile));
     }
 
     private byte[] readInFile(File file) throws IOException {

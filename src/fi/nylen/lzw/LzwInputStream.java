@@ -51,10 +51,10 @@ public class LzwInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        if (oldCode == -1) {
-            return expandFirst();
-        } else if (buffer.hasRemaining()) {
+        if (buffer.hasRemaining()) {
             return buffer.get() & BYTE_TO_INT_MASK;
+        } else if (oldCode == -1) {
+            return expandFirst();
         } else {
             return expandNext();
         }
@@ -64,7 +64,7 @@ public class LzwInputStream extends InputStream {
         oldCode = reader.read();
         if (oldCode != StringTable.STOP_CODE) {
             character = (byte)oldCode;
-            return character;
+            return character & BYTE_TO_INT_MASK;
         } else {
             return -1;
         }
@@ -73,6 +73,7 @@ public class LzwInputStream extends InputStream {
     private int expandNext() throws IOException {
         if (codeWidthNeedsToBeIncreased()) {
             reader.increaseCodeWidth();
+            codeWidth++;
         }
         
         int newCode = reader.read();
@@ -91,7 +92,7 @@ public class LzwInputStream extends InputStream {
     }
 
     private void addToBuffer(byte[] string, int off, int length) {
-        if (string.length > 1) {
+        if ( (off + length) <= string.length) {
             buffer.clear();
             buffer.put(string, off, length);
             buffer.flip();
@@ -101,10 +102,10 @@ public class LzwInputStream extends InputStream {
     private byte[] translate(int newCode, int oldCode, byte character) {
         if (!(table.contains(newCode))) {
             byte[] translated = table.translate(oldCode);
-            byte[] string     = new byte[translated.length+1];
-            System.arraycopy(translated, 0, string, 0, translated.length);
-            string[string.length-1] = character;
 
+            byte[] string = new byte[translated.length+1];
+            string[translated.length] = character;
+            System.arraycopy(translated, 0, string, 0, translated.length);
             return string;
         } else {
             return table.translate(newCode);
