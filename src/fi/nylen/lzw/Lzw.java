@@ -1,9 +1,6 @@
 package fi.nylen.lzw;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Utility program for compressing files with LZW and decompressing already
@@ -51,12 +48,15 @@ public class Lzw {
     public void run() throws IOException {
         if (options.getAction() == Action.COMPRESS) {
             compress();
+        } else if (options.getAction() == Action.DECOMPRESS) {
+            decompress();
         }
     }    
 
     private void compress() throws IOException {
         File inputFile = new File(options.getFileName());
-        File outputFile = createOutputFile();
+        String outputFileName = inputFile.getName() + ".lzw";
+        File outputFile = createOutputFile(outputFileName);
         LzwOutputStream lzw = null;
         FileInputStream fis = null;
         
@@ -87,7 +87,7 @@ public class Lzw {
     }
 
     private void writeCompressedData(FileInputStream from, LzwOutputStream to) throws IOException {
-        byte[] input = new byte[4096];
+        byte[] input = new byte[8192];
         int bytesRead;
         int i = 0;
 
@@ -103,9 +103,7 @@ public class Lzw {
         to.finish();
     }
 
-    private File createOutputFile() {
-        File inputFile = new File(options.getFileName());
-        String outputFileName = inputFile.getName() + ".lzw";
+    private File createOutputFile(String outputFileName) {
         File outputFile = new File(outputFileName);
         try {
             if (outputFile.createNewFile()) {
@@ -115,5 +113,57 @@ public class Lzw {
         }
 
         return null;
+    }
+
+    private void decompress() throws IOException {
+        File inputFile  = new File(options.getFileName());
+        File outputFile = createOutputFile(decompressedOutputFileName(inputFile.getName()));
+
+        LzwInputStream lzw = null;
+        OutputStream to    = null;
+
+        try {
+            lzw = createLzwInputStream(inputFile);
+            to = new BufferedOutputStream(new FileOutputStream(outputFile));
+            byte[] buffer = new byte[8192];
+
+            int bytesRead;
+            while ( lzw.available() >0) {
+                bytesRead = lzw.read(buffer);
+                to.write(buffer, 0, bytesRead);
+            }
+        } finally {
+            if (lzw != null) {
+                try {
+                    lzw.close();
+                } catch(IOException e) {
+
+                }
+            }
+
+            if (to != null) {
+                try {
+                    to.close();
+                } catch (IOException e) {
+
+                }
+            }
+        }
+    }
+
+    private String decompressedOutputFileName(String inputFileName) {
+        int pos;
+        if ((pos = inputFileName.lastIndexOf('.')) != -1) {
+            return inputFileName.substring(0, pos);
+        } else {
+            return inputFileName;
+        }
+    }
+
+    private LzwInputStream createLzwInputStream(File inputFile) throws IOException {
+        return new LzwInputStream(
+                options.getCodeWidth(),
+                options.getMaxCodeWidth(),
+                new BufferedInputStream(new FileInputStream(inputFile)));
     }
 }

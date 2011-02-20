@@ -24,7 +24,7 @@ public class StringTable {
      */
     public StringTable(int codeWidth) {
         int tableSize = (int)Math.pow(2, codeWidth);
-        maxCode = tableSize;
+        maxCode = tableSize-1;
         bits = codeWidth;
         bitMask = tableSize-1;
         prefixCodes = new int[tableSize];
@@ -61,7 +61,8 @@ public class StringTable {
             int index = findIndex(prefixCode, appendCharacter);
             prefixCodes[index] = prefixCode;
             appendCharacters[index] = appendCharacter;
-            codeValues[index] = nextCode++;
+            codeValues[index] = nextCode;
+            nextCode++;
 
             return true;
         } else {

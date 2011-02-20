@@ -15,18 +15,24 @@ public class CodeReader {
         this.in        = in;
     }
 
+    public void increaseCodeWidth() {
+        codeWidth++;
+    }
+    
     public boolean hasNext() throws IOException {
         return lastCode != StringTable.STOP_CODE;
     }
 
     public int read() throws IOException {
-        if (!(hasNext()))
+        if (!(hasNext())) {
             return StringTable.STOP_CODE;
-
+        }
+        
         while (inputBitCount < codeWidth) {
             int b = in.read();
-            if (b == -1)
+            if (b == -1) {
                 return -1;
+            }
 
             inputBitBuffer |= b << (24 - inputBitCount);
             inputBitCount  += 8;

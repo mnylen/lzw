@@ -13,7 +13,7 @@ public class TranslationTablePerformanceTest {
     
     @Before
     public void setUp() {
-        table = new TranslationTable(23);
+        table = new TranslationTable(22);
     }
     
     @Test
