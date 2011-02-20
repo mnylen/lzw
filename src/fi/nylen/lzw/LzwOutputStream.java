@@ -63,10 +63,6 @@ public class LzwOutputStream extends OutputStream {
                 }
 
                 prefixCode = b;
-
-                if (prefixCode <= 0) {
-                    System.out.println("prefix code is <= 0: " + prefixCode + ", b = " + b);
-                }
             }
         }
     }
