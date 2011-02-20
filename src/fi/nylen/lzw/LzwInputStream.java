@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 public class LzwInputStream extends InputStream {
+    private static final int BYTE_TO_INT_MASK = 0xFF;
     private int maxCodeWidth;
     private int codeWidth;
     private ByteBuffer buffer;
@@ -51,7 +52,7 @@ public class LzwInputStream extends InputStream {
         if (oldCode == -1) {
             return expandFirst();
         } else if (buffer.hasRemaining()) {
-            return buffer.get() & 0xFF;
+            return buffer.get() & BYTE_TO_INT_MASK;
         } else {
             return expandNext();
         }
@@ -77,7 +78,7 @@ public class LzwInputStream extends InputStream {
             table.add(oldCode, character);
             oldCode = newCode;
 
-            return character & 0xFF;
+            return character & BYTE_TO_INT_MASK;
         } else {
             return -1;
         }
