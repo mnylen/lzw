@@ -1,6 +1,5 @@
 package fi.nylen.lzw;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
