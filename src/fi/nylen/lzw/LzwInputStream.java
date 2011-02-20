@@ -13,6 +13,14 @@ public class LzwInputStream extends InputStream {
     private byte character;
     private TranslationTable table;
 
+    /**
+     * Creates a new <code>LzwInputStream</code> for reading
+     * LZW compressed <code>InputStream</code>.
+     *
+     * @param initialCodeWidth the initial code width that was used in compression
+     * @param maxCodeWidth the maximum code width that was used in compression
+     * @param in the underlying <code>InputStream</code>
+     */
     public LzwInputStream(int initialCodeWidth, int maxCodeWidth, InputStream in) {
         this.codeWidth    = initialCodeWidth;
         this.maxCodeWidth = maxCodeWidth;
