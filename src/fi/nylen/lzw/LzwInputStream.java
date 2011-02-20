@@ -9,6 +9,7 @@ public class LzwInputStream extends InputStream {
     private int codeWidth;
     private ByteBuffer buffer;
     private CodeReader reader;
+    private InputStream in;
     private int oldCode = -1;
     private byte character;
     private TranslationTable table;
@@ -26,9 +27,15 @@ public class LzwInputStream extends InputStream {
         this.maxCodeWidth = maxCodeWidth;
         this.reader       = new CodeReader(in, codeWidth);
         this.table        = new TranslationTable(maxCodeWidth);
-
-        this.buffer = ByteBuffer.allocate(4096);
+        this.in           = in;
+        
+        this.buffer = ByteBuffer.allocate(BUFFER_SIZE);
         this.buffer.flip();
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
     }
 
     /**
