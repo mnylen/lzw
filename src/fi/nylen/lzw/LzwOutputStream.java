@@ -55,9 +55,9 @@ public class LzwOutputStream extends OutputStream {
                 prefixCode = newPrefixCode;
             } else {
                 writer.write(prefixCode);
-                table.add(prefixCode, (byte)b);
+                boolean added = table.add(prefixCode, (byte)b);
 
-                if (codeWidthNeedsToBeIncreased()) {
+                if (added && codeWidthNeedsToBeIncreased()) {
                     writer.increaseCodeWidth();
                     codeWidth++;
                 }
@@ -92,6 +92,6 @@ public class LzwOutputStream extends OutputStream {
 
     private boolean codeWidthNeedsToBeIncreased() {
         int maxCodeForCurrentWidth = (int)Math.pow(2, codeWidth);
-        return !(codeWidth >= maxCodeWidth) && table.nextCode() >= maxCodeForCurrentWidth;
+        return (codeWidth < maxCodeWidth) && (maxCodeForCurrentWidth+1) == table.nextCode();
     }
 }

@@ -33,17 +33,17 @@ public class LzwTest {
     }
 
     private void testCompress() throws IOException {
-        lzw = new Lzw(new CliOptions(Lzw.Action.COMPRESS, 12, 12, "test/fi/nylen/lzw/eng_com.dic"));
+        lzw = new Lzw(new CliOptions(Lzw.Action.COMPRESS, 9, 13, "test/fi/nylen/lzw/eng_com.dic"));
         lzw.run();
 
         File file = new File("eng_com.dic.lzw");
         assertTrue(file.exists());
-        assertArrayEquals(compressFile("test/fi/nylen/lzw/eng_com.dic", 12, 12), readInFile(file));
+        assertArrayEquals(compressFile("test/fi/nylen/lzw/eng_com.dic", 9, 13), readInFile(file));
     }
 
 
     private void testDecompress() throws IOException {
-        lzw = new Lzw(new CliOptions(Lzw.Action.DECOMPRESS, 12, 12, "eng_com.dic.lzw"));
+        lzw = new Lzw(new CliOptions(Lzw.Action.DECOMPRESS, 9, 13, "eng_com.dic.lzw"));
         lzw.run();
 
         File originalFile = new File("test/fi/nylen/lzw/eng_com.dic");
