@@ -16,6 +16,10 @@ public class TranslationTable {
         translated = new byte[tableSize/2][];
     }
 
+    public int nextCode() {
+        return nextCode;
+    }
+    
     public boolean contains(int code) {
         return code < nextCode;
     }

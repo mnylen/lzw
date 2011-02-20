@@ -71,6 +71,10 @@ public class LzwInputStream extends InputStream {
     }
     
     private int expandNext() throws IOException {
+        if (codeWidthNeedsToBeIncreased()) {
+            reader.increaseCodeWidth();
+        }
+        
         int newCode = reader.read();
         if (newCode != StringTable.STOP_CODE) {
             byte[] string = translate(newCode, oldCode, character);
@@ -105,5 +109,10 @@ public class LzwInputStream extends InputStream {
         } else {
             return table.translate(newCode);
         }
+    }
+
+    private boolean codeWidthNeedsToBeIncreased() {
+        int maxCodeForCurrentWidth = (int)Math.pow(2, codeWidth);
+        return !(codeWidth >= maxCodeWidth) && table.nextCode() == maxCodeForCurrentWidth;
     }
 }

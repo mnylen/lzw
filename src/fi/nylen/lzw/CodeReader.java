@@ -15,6 +15,10 @@ public class CodeReader {
         this.in        = in;
     }
 
+    public void increaseCodeWidth() {
+        codeWidth++;
+    }
+    
     public boolean hasNext() throws IOException {
         return lastCode != StringTable.STOP_CODE;
     }
