@@ -74,7 +74,7 @@ public class LzwInputStream extends InputStream {
             byte[] string = translate(newCode, oldCode, character);
             character = string[0];
 
-            addToBuffer(string);
+            addToBuffer(string, 1, string.length-1);
             table.add(oldCode, character);
             oldCode = newCode;
 
@@ -84,10 +84,10 @@ public class LzwInputStream extends InputStream {
         }
     }
 
-    private void addToBuffer(byte[] string) {
+    private void addToBuffer(byte[] string, int off, int length) {
         if (string.length > 1) {
             buffer.clear();
-            buffer.put(string, 1, string.length-1);
+            buffer.put(string, off, length);
             buffer.flip();
         }
     }
