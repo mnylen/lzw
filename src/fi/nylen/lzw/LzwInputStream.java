@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 public class LzwInputStream extends InputStream {
+    private static final int BUFFER_SIZE = 4096;
     private static final int BYTE_TO_INT_MASK = 0xFF;
+    
     private int maxCodeWidth;
     private int codeWidth;
     private ByteBuffer buffer;
