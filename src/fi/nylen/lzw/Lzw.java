@@ -56,7 +56,14 @@ public class Lzw {
     private void compress() throws IOException {
         File inputFile = new File(options.getFileName());
         String outputFileName = inputFile.getName() + ".lzw";
-        File outputFile = createOutputFile(outputFileName);
+        File outputFile = new File(outputFileName);
+        if (outputFile.exists()) {
+            System.out.println("lzw: output file already exists: " + outputFile.getName());
+            return;
+        }
+        
+        createOutputFile(outputFile);
+        
         LzwOutputStream lzw = null;
         FileInputStream fis = null;
         
@@ -103,8 +110,7 @@ public class Lzw {
         to.finish();
     }
 
-    private File createOutputFile(String outputFileName) {
-        File outputFile = new File(outputFileName);
+    private File createOutputFile(File outputFile) {
         try {
             if (outputFile.createNewFile()) {
                 return outputFile;
@@ -117,8 +123,14 @@ public class Lzw {
 
     private void decompress() throws IOException {
         File inputFile  = new File(options.getFileName());
-        File outputFile = createOutputFile(decompressedOutputFileName(inputFile.getName()));
 
+        File outputFile = new File(decompressedOutputFileName(inputFile.getName()));
+        if (outputFile.exists()) {
+            System.out.println("lzw: output file already exists: " + outputFile.getName());
+            return;
+        }
+
+        createOutputFile(outputFile);
         LzwInputStream lzw = null;
         OutputStream to    = null;
 
@@ -130,6 +142,13 @@ public class Lzw {
             int bytesRead;
             while ( (bytesRead = lzw.read(buffer)) > 0) {
                 to.write(buffer, 0, bytesRead);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // Remove the output file
+            if (outputFile.exists()) {
+                outputFile.delete();
             }
         } finally {
             if (lzw != null) {
