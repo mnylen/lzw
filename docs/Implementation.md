@@ -13,6 +13,13 @@ and decompression algorithm with the Java programming language version 1.6.
 The implementation supports the use of variable-width code lengths up to 32
 bits for improved compression ratio with larger documents.
 
+### Technologies used
+
+* Java SE 1.6
+* Apache Ant for build management
+* JavaDoc for inline documentation
+* Git for version control
+
 ### Obtaining the source code
 
 To obtain the source code, Git needs to be installed on your local computer:
@@ -43,12 +50,18 @@ over *21* should not be used, because after that point, memory consumption
 will start to increase and one must give larger values to Java's default
 `-Xms` and `-Xmx` attributes that control the heap size.
 
-### Technologies used
+### Code structure
 
-* Java SE 1.6
-* Apache Ant for build management
-* JavaDoc for inline documentation
-* Git for version control
+The source code is divided into three main classes:
+
+* `fi.nylen.lzw.Lzw` contains the utility program
+* `fi.nylen.lzw.LzwOutputStream` handles compression of uncompressed data streams
+* `fi.nylen.lzw.LzwInputStream` handles decompression of compressed data streams
+
+`LzwOutputStream` delegates the string table management to `StringTable` class,
+while `LzwInputStream` uses `TranslationTable` for translation table management.
+Writing and reading of codes is implemented in `CodeWriter` and `CodeReader`
+classes.
 
 ### Compression
 
