@@ -13,15 +13,42 @@ and decompression algorithm with the Java programming language version 1.6.
 The implementation supports the use of variable-width code lengths up to 32
 bits for improved compression ratio with larger documents.
 
-### Implementation
+### Obtaining the source code
+
+To obtain the source code, Git needs to be installed on your local computer:
+
+    $ git clone git://github.com/mnylen/lzw.git mnylen-lzw
+    
+This will clone the source repository under _mnylen-lzw_ directory. To build
+the utility tool that comes with the implementation, run the following command
+on the root of the source tree:
+
+    $ ant jar
+    
+This will create _dist/lzw.jar_, which can be run with `java -jar` command.
+
+### Usage
+
+The LZW implementation comes shipped with an utility program that you can
+use to test compressing and decompressing files:
+
+    $ java -jar lzw.jar compress --code-width=N --max-code-width=M somelargefile.txt
+
+    $ java -jar lzw.jar decompress --code-width=N --max-code-width=M somelargefile.txt.lzw
+
+The options `--code-width` and `--max-code-width` control the initial and
+maximum code width respectively. Minimum value for `--code-width` is *9*. In
+theory, maximum value for `--max-code-width` is *32*, but in practice, values
+over *21* should not be used, because after that point, memory consumption
+will start to increase and one must give larger values to Java's default
+`-Xms` and `-Xmx` attributes that control the heap size.
+
+### Technologies used
 
 * Java SE 1.6
 * Apache Ant for build management
 * JavaDoc for inline documentation
 * Git for version control
-
-For readonly access to the version control, see the
-[GitHub project page](https://github.com/mnylen/lzw)
 
 ### Compression
 
@@ -64,7 +91,7 @@ width. Initially all indexes in the tables are initialized with a special value
 
 Because the string table does not store the actual strings, but only pointer
 to prefix string and the appended character, it's operations are efficient both
-memory and performance wise. Code widths up to 22 bits can be used without
+memory and performance wise. Code widths up to 21 bits can be used without
 requiring tuning the JVM options `-Xms` and `-Xmx`. Code widths larger than 22
 bits, however, require more memory, because by default Java only allocates
 128 MB for the heap.
@@ -114,4 +141,14 @@ follows:
         OLD_CODE = NEW_CODE
     END of WHILE
     
-In decompression, a similar structure is used for 
+In decompression, the translation table management is done by storing the
+strings, as found, in an string array of size `2^MAX_CODE_WIDTH`. Therefore
+adding a string to the table and translating a code require only one lookup
+to the array of translated strings.
+
+The downside of this is that storing the strings consume much more memory
+than simply storing the `prefixCode` and `appendCharacter` pairs. However,
+the performance is better, because the `prefixCode` and `appendCharacter`
+don't need to be decoded back into strings (a O(n) operation, where n is
+the string length)
+
