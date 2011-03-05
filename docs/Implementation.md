@@ -165,3 +165,42 @@ the performance is better, because the `prefixCode` and `appendCharacter`
 don't need to be decoded back into strings (a O(n) operation, where n is
 the string length)
 
+### Testing
+
+The implementation has been tested both by automatic unit tests and by
+manually compressing and decompressing files.
+
+Automated unit tests are located under the _test_ directory at the root of
+the source tree. To run the tests, run the `ant` program without any arguments
+from the root of the source tree:
+
+  $ ant
+
+This will run the tests and output short summary of the tests that have been
+run.
+
+The test material used in manual testing has been mostly text files, including
+
+* List of all English words (bundled and located in _test/fi/nylen/lzw/eng_com.dic_)
+* Pizza&Chili Corpus 200 MB sources (downloadable from http://pizzachili.dcc.uchile.cl/texts.html)
+* Combined source code of the implementation
+  
+Also the implementation has been tested and verified to work with binary
+files.
+
+Manual tests indicate the compression ratio for plain text files can be over
+50 %.
+
+Some problems noticed during testing:
+
+* Using larger (over 21) code widths, the memory consumption increases dramatically.
+  Solvable by increasing the Java heap size.
+
+* Does not utilize clear codes. When the table gets full, stops adding new codes and
+  after that, the compression ratio will drop.
+  Solvable by monitoring the compression ratio, but there was no time to
+  implement it.
+
+* When compressing a file and then decompressing it, one must remember the code
+  width arguments used in compression. Solvable by storing a header with the info
+  to the compressed file, but there was no time to implement it.
