@@ -128,8 +128,7 @@ public class Lzw {
             byte[] buffer = new byte[8192];
 
             int bytesRead;
-            while ( lzw.available() >0) {
-                bytesRead = lzw.read(buffer);
+            while ( (bytesRead = lzw.read(buffer)) > 0) {
                 to.write(buffer, 0, bytesRead);
             }
         } finally {
