@@ -99,4 +99,64 @@ public class CliOptionsTest {
             assertEquals("Invalid value: --code-width must be numeric value", e.getMessage());
         }
     }
+
+    @Test
+    public void testFromArgsWithTooSmallValueForCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--code-width=8", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --code-width must be at least 9", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsWithTooSmallValueForMaxCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--max-code-width=8", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --max-code-width must be at least 9", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsWithTooLargeValueForCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--code-width=33", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --code-width must not exceed 32", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsWithTooLargeValueForMaxCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--max-code-width=33", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --max-code-width must not exceed 32", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsWithMaxCodeWidthSmallerThanCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--code-width=10", "--max-code-width=9", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --max-code-width must be greater than or equal to --code-width", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testFromArgsWithMaxCodeWidthSmallerThanCodeWidthWhenCodeWidthGivenAfterMaxCodeWidth() {
+        try {
+            CliOptions.fromArgs(new String[] { "compress", "--max-code-width=9", "--code-width=10", "file.txt" });
+            fail();
+        } catch (IllegalOptionsException e) {
+            assertEquals("Invalid value: --code-width must be less than or equal to --max-code-width", e.getMessage());
+        }
+    }
 }

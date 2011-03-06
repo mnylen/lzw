@@ -1,7 +1,7 @@
 package fi.nylen.lzw;
 
 public class CliOptions {
-    public static final int DEFAULT_CODE_WIDTH = 12;
+    public static final int DEFAULT_CODE_WIDTH = 9;
 
     private Lzw.Action action;
     private int codeWidth;
@@ -45,9 +45,23 @@ public class CliOptions {
 
             if (optionName.equals("--code-width")) {
                 codeWidth = parseNumericOption("--code-width", optionValue);
+                if (codeWidth < 9) {
+                    throw new IllegalOptionsException("Invalid value: --code-width must be at least 9");
+                } else if (maxCodeWidth != -1 && maxCodeWidth < codeWidth) {
+                    throw new IllegalOptionsException("Invalid value: --code-width must be less than or equal to --max-code-width");
+                } else if (codeWidth > 32) {
+                    throw new IllegalOptionsException("Invalid value: --code-width must not exceed 32");
+                }
                 off++;
             } else if (optionName.equals("--max-code-width")) {
                 maxCodeWidth = parseNumericOption("--max-code-width", optionValue);
+                if (maxCodeWidth < 9) {
+                    throw new IllegalOptionsException("Invalid value: --max-code-width must be at least 9");
+                } else if (codeWidth > maxCodeWidth) {
+                    throw new IllegalOptionsException("Invalid value: --max-code-width must be greater than or equal to --code-width");
+                } else if (maxCodeWidth > 32) {
+                    throw new IllegalOptionsException("Invalid value: --max-code-width must not exceed 32");
+                }
                 off++;
             } else if (optionName.startsWith("--")) {
                 throw new IllegalOptionsException("Unknown option: " + optionName);
