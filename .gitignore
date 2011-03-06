@@ -2,3 +2,6 @@ out
 *.iml
 .idea
 build
+docs/api
+dist
+data
