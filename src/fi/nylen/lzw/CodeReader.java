@@ -3,7 +3,7 @@ package fi.nylen.lzw;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class CodeReader {
+class CodeReader {
     private int inputBitBuffer = 0;
     private int inputBitCount = 0;
     private int codeWidth;

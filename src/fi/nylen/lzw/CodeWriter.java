@@ -7,7 +7,7 @@ import java.io.OutputStream;
  * Writes codes to <code>OutputStream</code> using a specified
  * code width (in bits).
  */
-public class CodeWriter {
+class CodeWriter {
     private int codeWidth;
     private int outputBitBuffer = 0;
     private int outputBitCount = 0;
