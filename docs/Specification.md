@@ -2,7 +2,7 @@
 
 Lempel-Ziv-Welch
 
-Mikko Nylén
+Mikko Nyl&eacute;n
 
 ## Specification Document
 
