@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * String table management.
  */
-class StringTable {
+public class StringTable {
     public static final int STOP_CODE = 256;
     public static final int CLEAR_CODE = 257;
     private int nextCode = CLEAR_CODE+1;

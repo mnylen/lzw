@@ -3,7 +3,7 @@ package fi.nylen.lzw;
 /**
  * Translation table management.
  */
-class TranslationTable {
+public class TranslationTable {
     private int nextCode = StringTable.CLEAR_CODE+1;
     private int maxCode;
     private byte[][] translated;

@@ -4,7 +4,7 @@ package fi.nylen.lzw;
  * Utility class for parsing command line options passed to the <code>Lzw</code> utility
  * program.
  */
-class CliOptions {
+public class CliOptions {
     public static final int DEFAULT_CODE_WIDTH = 9;
 
     private Lzw.Action action;
