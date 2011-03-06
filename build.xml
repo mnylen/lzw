@@ -81,4 +81,22 @@
         <exec executable="markdown" output="${compile.docs.dir}/Implementation.html"><arg value="${docs.dir}/Implementation.md" /></exec>
         <exec executable="markdown" output="${compile.docs.dir}/Specification.html"><arg value="${docs.dir}/Specification.md" /></exec>
     </target>
+
+    <target name="release" depends="clean, test, mkdirs, compile, jar, javadoc, markdown">
+        <mkdir dir="tmp" />
+        <copy file="${dist.dir}/lzw.jar" todir="tmp" />
+        <copy todir="tmp/docs/javadoc">
+            <fileset dir="${api.docs.dir}" />
+        </copy>
+
+        <copy todir="tmp/docs">
+            <fileset dir="${compile.docs.dir}" />
+        </copy>
+
+        <zip file="${dist.dir}/mnylen-lzw.zip">
+            <fileset dir="tmp" />
+        </zip>
+
+        <delete dir="tmp" />
+    </target>
 </project>
