@@ -3,7 +3,7 @@ package fi.nylen.lzw;
 import java.util.Arrays;
 
 /**
- * Structure for adding and retrieving string entries in LZW compression.
+ * String table management.
  */
 class StringTable {
     public static final int STOP_CODE = 256;
@@ -17,8 +17,7 @@ class StringTable {
     private int[] codeValues;
 
     /**
-     * Initializes a new string table that can hold p(2^codeWidth) entries, where
-     * p(n) calculates the nearest, larger than n, prime number to n.
+     * Initializes a new string table that can hold 2^codeWidth.
      * 
      * @param codeWidth the code width
      */
@@ -44,6 +43,7 @@ class StringTable {
     }
 
     /**
+     * Checks whether the table is full or not.
      * @return <code>true</code> if the table is full, <code>false</code> otherwise
      */
     public boolean isFull() {
