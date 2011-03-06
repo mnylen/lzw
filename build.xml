@@ -4,6 +4,7 @@
     <property name="build.dir" value="${basedir}/build/java" />
     <property name="build.test.dir" value="${basedir}/build/test" />
     <property name="docs.dir" value="${basedir}/docs" />
+    <property name="compile.docs.dir" value="${docs.dir}/compiled" />
     <property name="api.docs.dir" value="${docs.dir}/api" />
     <property name="dist.dir" value="${basedir}/dist" />
     <property name="lib.dir" value="${basedir}/lib" />
@@ -73,5 +74,11 @@
                  windowtitle="Lempel-Ziv-Welch">
 
         </javadoc>
+    </target>
+
+    <target name="markdown">
+        <mkdir dir="${compile.docs.dir}" />
+        <exec executable="markdown" output="${compile.docs.dir}/Implementation.html"><arg value="${docs.dir}/Implementation.md" /></exec>
+        <exec executable="markdown" output="${compile.docs.dir}/Specification.html"><arg value="${docs.dir}/Specification.md" /></exec>
     </target>
 </project>
