@@ -2,7 +2,7 @@
 
 Lempel-Ziv-Welch
 
-Mikko Nylén
+Mikko Nyl&eacute;n
 
 ## Implementation document
 
@@ -18,6 +18,7 @@ bits for improved compression ratio with larger documents.
 * Java SE 1.6
 * Apache Ant for build management
 * JavaDoc for inline documentation
+* Markdown for top level documentation
 * Git for version control
 
 ### Obtaining the source code
@@ -181,8 +182,8 @@ run.
 
 The test material used in manual testing has been mostly text files, including
 
-* List of all English words (bundled and located in _test/fi/nylen/lzw/eng_com.dic_)
-* Pizza&Chili Corpus 200 MB sources (downloadable from http://pizzachili.dcc.uchile.cl/texts.html)
+* List of all English words (bundled and located in _test/fi/nylen/lzw/eng\_com.dic_)
+* Pizza&Chili Corpus 200 MB sources (downloadable from [http://pizzachili.dcc.uchile.cl/texts.html](http://pizzachili.dcc.uchile.cl/texts.html))
 * Combined source code of the implementation
   
 Also the implementation has been tested and verified to work with binary
