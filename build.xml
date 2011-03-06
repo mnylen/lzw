@@ -85,6 +85,27 @@
     <target name="release" depends="clean, test, mkdirs, compile, jar, javadoc, markdown">
         <mkdir dir="tmp" />
         <copy file="${dist.dir}/lzw.jar" todir="tmp" />
+
+        <copy todir="tmp/sources/docs">
+            <fileset dir="${docs.dir}">
+                <include name="*.md" />
+            </fileset>
+        </copy>
+
+        <copy todir="tmp/sources/src">
+            <fileset dir="${src.java.dir}" />
+        </copy>
+
+        <copy todir="tmp/sources/test">
+            <fileset dir="${src.test.dir}" />
+        </copy>
+
+        <copy todir="tmp/sources/lib">
+            <fileset dir="${lib.dir}" />
+        </copy>
+
+        <copy todir="tmp/sources" file="build.xml" />
+
         <copy todir="tmp/docs/javadoc">
             <fileset dir="${api.docs.dir}" />
         </copy>
