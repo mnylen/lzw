@@ -3,6 +3,8 @@
     <property name="src.test.dir" value="${basedir}/test" />
     <property name="build.dir" value="${basedir}/build/java" />
     <property name="build.test.dir" value="${basedir}/build/test" />
+    <property name="docs.dir" value="${basedir}/docs" />
+    <property name="api.docs.dir" value="${docs.dir}/api" />
     <property name="dist.dir" value="${basedir}/dist" />
     <property name="lib.dir" value="${basedir}/lib" />
 
@@ -59,5 +61,17 @@
                 <attribute name="Main-Class" value="fi.nylen.lzw.Lzw" />
             </manifest>
         </jar>
+    </target>
+
+    <target name="javadoc">
+        <javadoc packagenames="fi.nylen.lzw.*"
+                 sourcepath="${src.java.dir}"
+                 destdir="${api.docs.dir}"
+                 author="true"
+                 version="true"
+                 use="true"
+                 windowtitle="Lempel-Ziv-Welch">
+
+        </javadoc>
     </target>
 </project>
