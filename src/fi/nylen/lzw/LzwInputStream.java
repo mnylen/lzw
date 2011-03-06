@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
+/**
+ * <code>InputStream</code> for reading compressed data from the underlying
+ * input stream stream. Decompression is done using Lempel-Ziv-Welch data
+ * decompression algorithm with variable width codes.
+ */
 public class LzwInputStream extends InputStream {
     private static final int BUFFER_SIZE = 4096;
     private static final int BYTE_TO_INT_MASK = 0xFF;
@@ -31,17 +36,33 @@ public class LzwInputStream extends InputStream {
         this.reader       = new CodeReader(in, codeWidth);
         this.table        = new TranslationTable(maxCodeWidth);
         this.in           = in;
-        
+
+        /*
+         Initialize a buffer to store bytes that have been expanded from the
+         underlying stream, but have not yet been read out from
+         LzwInputStream
+         */
         this.buffer = ByteBuffer.allocate(BUFFER_SIZE);
         this.buffer.flip();
     }
 
+    /**
+     * Closes this input stream.
+     * @throws IOException if anything goes wrong
+     */
     @Override
     public void close() throws IOException {
         in.close();
     }
 
     /**
+     * Determines if there are more bytes available to read.
+     *
+     * <p>Note that even though a call to available() would return 1, it does
+     * not necessarily mean there are more actual bytes to read. For example,
+     * if the next and only byte to be read is the stop code, <code>read()</code>
+     * will return -1</p>.
+     *
      * @return <code>1</code> if there are more bytes to be read; <code>0</code> otherwise
      */
     @Override
@@ -49,6 +70,11 @@ public class LzwInputStream extends InputStream {
         return (reader.hasNext() || buffer.hasRemaining()) ? 1 : 0;
     }
 
+    /**
+     * Reads the next byte from the underlying input stream and decompresses it.
+     * @return the decompressed byte as integer or <code>-1</code> if there are no more bytes to read
+     * @throws IOException if anything goes wrong
+     */
     @Override
     public int read() throws IOException {
         if (buffer.hasRemaining()) {

@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * <code>OutputStream</code> for outputting bytes as LZW.
+ * <code>OutputStream</code> for outputting uncompressed data to the underlying
+ * output stream. Compression is done using Lempel-Ziv-Welch data compression
+ * algorithm with variable width codes.
  */
 public class LzwOutputStream extends OutputStream {
     private static final int BYTE_TO_INT_MASK = 0xFF;
@@ -15,9 +17,15 @@ public class LzwOutputStream extends OutputStream {
     private StringTable table;
     private int prefixCode = -1;
 
+    protected LzwOutputStream(int initialCodeWidth, int maxCodeWidth, CodeWriter writer) {
+        this.codeWidth    = initialCodeWidth;
+        this.maxCodeWidth = maxCodeWidth;
+        this.writer       = writer;
+        this.table        = new StringTable(maxCodeWidth);
+    }
+
     /**
-     * Creates an output stream that writes LZW compressed bytes to the underlying
-     * output stream.
+     * Creates a new <code>LzwOutputStream</code> for writing compressed data to <code>out</code>.
      * @param initialCodeWidth initial code width for compression
      * @param maxCodeWidth maximum code width for compression
      * @param out stream to write to
@@ -27,21 +35,7 @@ public class LzwOutputStream extends OutputStream {
     }
 
     /**
-     * Creates an output stream that writes LZW compressed bytes using the
-     * writer.
-     * @param initialCodeWidth initial code width for compression
-     * @param maxCodeWidth maximum code width for compression
-     * @param writer writer to use
-     */
-    protected LzwOutputStream(int initialCodeWidth, int maxCodeWidth, CodeWriter writer) {
-        this.codeWidth    = initialCodeWidth;
-        this.maxCodeWidth = maxCodeWidth;
-        this.writer       = writer;
-        this.table        = new StringTable(maxCodeWidth);
-    }
-
-    /**
-     * Writes single byte to the underlying output stream.
+     * Writes and compresses a single byte to the underlying output stream.
      * @param b byte to write
      * @throws IOException if anything goes wrong
      */
@@ -67,6 +61,15 @@ public class LzwOutputStream extends OutputStream {
         }
     }
 
+    /**
+     * Writes and compresses bytes between <code>off</code> and
+     * <code>off+len-1</code> in the <code>input</code> array to the underlying
+     * output stream.
+     * @param input input array
+     * @param off offset
+     * @param len number of bytes to write
+     * @throws IOException if anything goes wrong
+     */
     @Override
     public void write(byte[] input, int off, int len) throws IOException {
         for (int i = off; i < len; i++) {
