@@ -175,7 +175,7 @@ Automated unit tests are located under the _test_ directory at the root of
 the source tree. To run the tests, run the `ant` program without any arguments
 from the root of the source tree:
 
-  $ ant
+    $ ant
 
 This will run the tests and output short summary of the tests that have been
 run.
