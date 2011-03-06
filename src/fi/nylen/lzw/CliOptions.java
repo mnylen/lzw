@@ -1,6 +1,10 @@
 package fi.nylen.lzw;
 
-public class CliOptions {
+/**
+ * Utility class for parsing command line options passed to the <code>Lzw</code> utility
+ * program.
+ */
+class CliOptions {
     public static final int DEFAULT_CODE_WIDTH = 9;
 
     private Lzw.Action action;
@@ -8,6 +12,13 @@ public class CliOptions {
     private int maxCodeWidth;
     private String fileName;
 
+    /**
+     * Creates new options.
+     * @param action the action to perform
+     * @param codeWidth initial code width
+     * @param maxCodeWidth maximum code width
+     * @param fileName file to compress/decompress
+     */
     public CliOptions(Lzw.Action action, int codeWidth, int maxCodeWidth, String fileName) {
         this.action       = action;
         this.codeWidth    = codeWidth;
@@ -15,22 +26,44 @@ public class CliOptions {
         this.fileName     = fileName;
     }
 
+    /**
+     * Gets action.
+     * @return action
+     */
     public Lzw.Action getAction() {
         return action;
     }
 
+    /**
+     * Gets initial code width.
+     * @return initial code width
+     */
     public int getCodeWidth() {
         return codeWidth;
     }
 
+    /**
+     * Gets maximum code width.
+     * @return maximum code width
+     */
     public int getMaxCodeWidth() {
         return maxCodeWidth;
     }
 
+    /**
+     * Gets file name to compress/decompress.
+     * @return file name
+     */
     public String getFileName() {
         return fileName;
     }
 
+    /**
+     * Parses a <code>CliOptions</code> from the given arguments array.
+     * @param args the arguments
+     * @return the <code>CliOptions</code> parsed
+     * @throws IllegalOptionsException if the options could not be parsed
+     */
     public static CliOptions fromArgs(String[] args) throws IllegalOptionsException {
         int codeWidth = DEFAULT_CODE_WIDTH;
         int maxCodeWidth = -1;
