@@ -3,5 +3,6 @@ out
 .idea
 build
 docs/api
+docs/compiled
 dist
 data
